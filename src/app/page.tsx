@@ -68,12 +68,12 @@ const SERVICES = [
 
 const TRUSTED_CLIENTS = [
   { name: 'Mediclinic', logo: '/logos/mediclinic.png' },
-  { name: 'Bosch Car Service', logo: '/logos/bosch-car-service.png' },
-  { name: 'Discovery Insurance', logo: '/logos/discovery.png' },
-  { name: 'Dr Els Dentistry', logo: '/logos/dr-els-dentistry.png' },
+  { name: 'Bosch Car Service', logo: '/logos/bosch-car-service.svg' },
+  { name: 'Discovery Insurance', logo: '/logos/discovery.svg' },
+  { name: 'Dr Els Dentistry', logo: '/logos/dr-els-dentistry.jpg' },
   { name: 'Hope High School', logo: '/logos/hope-high-school.png' },
-  { name: 'Majuba TVET College', logo: '/logos/majuba-college.png' },
-  { name: 'NL Cars', logo: '/logos/nl-cars.png' },
+  { name: 'Majuba TVET College', logo: '/logos/majuba-college.jpg' },
+  { name: 'NL Cars', logo: '/logos/nl-cars.svg' },
 ]
 
 const TESTIMONIALS = [
@@ -87,19 +87,19 @@ const TESTIMONIALS = [
     text: 'We needed a complete workshop refit — new drainage, electrical upgrades for diagnostic equipment, and a fresh coat throughout. Now & Always quoted fairly, showed up when they said they would, and handed over a spotless workshop two days ahead of schedule.',
     author: 'Workshop Director',
     company: 'Bosch Car Service',
-    logo: '/logos/bosch-car-service.png',
+    logo: '/logos/bosch-car-service.svg',
   },
   {
     text: 'From boardroom renovations to backup-power installations across our Newcastle office, Now & Always has been our go-to contractor for three years running. Their paperwork is always in order and their quotes have never once crept beyond the agreed figure.',
     author: 'Regional Facilities Lead',
     company: 'Discovery Insurance',
-    logo: '/logos/discovery.png',
+    logo: '/logos/discovery.svg',
   },
   {
     text: 'The renovation of our dental suites had to meet very specific hygiene and airflow standards. Now & Always understood the requirements from day one, coordinated with our equipment suppliers, and delivered a space our patients feel comfortable in.',
     author: 'Practice Manager',
     company: 'Dr Els Dentistry',
-    logo: '/logos/dr-els-dentistry.png',
+    logo: '/logos/dr-els-dentistry.jpg',
   },
   {
     text: 'They built our new administrative block and refurbished two existing classrooms over the school holidays. The site was safe, clean, and ready for learners on the first day of term. We have already commissioned them for the next phase.',
@@ -111,13 +111,13 @@ const TESTIMONIALS = [
     text: 'Majuba College has multiple campuses, and Now & Always has handled maintenance, plumbing, and electrical upgrades across all of them. Their ability to scale without losing quality is why they remain on our approved vendor list year after year.',
     author: 'Campus Operations Manager',
     company: 'Majuba TVET College',
-    logo: '/logos/majuba-college.png',
+    logo: '/logos/majuba-college.jpg',
   },
   {
     text: 'Our showroom and workshop needed a full overhaul — flooring, lighting, plumbing, and signage. Now & Always managed every trade under one contract, which meant one point of contact and one invoice. That simplicity is worth a lot in our line of business.',
     author: 'Dealership Principal',
     company: 'NL Cars',
-    logo: '/logos/nl-cars.png',
+    logo: '/logos/nl-cars.svg',
   },
 ]
 
