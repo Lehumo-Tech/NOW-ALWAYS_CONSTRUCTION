@@ -30,25 +30,45 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files
 .env*
 
 # vercel
 .vercel
 
-
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-local-*
+
+# Internal dev files
 .claude
 .z-ai-config
 *.log
 dev.log
 dev.out.log
-test
-prompt
-
 server.log
-# Skills directory
 /skills/
+/.zscripts/
+
+# Temporary analysis and screenshot files
+clone_*.png
+page_*.png
+page_*.json
+section_*.png
+vlm_*.json
+search_*.json
+iframe_content.json
+worklog.md
+
+# Upload directory (source files already in public/)
+/upload/
+
+# Caddy dev server config
+Caddyfile
+
+# Examples not needed for production
+/examples/
+/mini-services/
+
+# Database
+/db/
