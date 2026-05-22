@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import {
   Phone,
@@ -29,7 +29,81 @@ import {
   MapPin,
   FileText,
   ExternalLink,
+  Navigation,
+  Mail,
 } from 'lucide-react'
+
+/* ─────────── SCROLL REVEAL HOOK ─────────── */
+
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed')
+          }
+        })
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    )
+
+    // Observe the container and all scroll-animated children
+    const elements = el.querySelectorAll('.scroll-reveal, .scroll-slide-left, .scroll-slide-right, .scroll-scale')
+    elements.forEach((child) => observer.observe(child))
+    // Also observe the container itself
+    if (el.classList.contains('scroll-reveal') || el.classList.contains('scroll-slide-left') || el.classList.contains('scroll-slide-right') || el.classList.contains('scroll-scale')) {
+      observer.observe(el)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  return ref
+}
+
+/* ─────────── 3D TILT HOOK ─────────── */
+
+function useTilt() {
+  const ref = useRef<HTMLDivElement>(null)
+
+  const handleMove = useCallback((e: MouseEvent) => {
+    const el = ref.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const centerX = rect.width / 2
+    const centerY = rect.height / 2
+    const rotateX = ((y - centerY) / centerY) * -6
+    const rotateY = ((x - centerX) / centerX) * 6
+    el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`
+  }, [])
+
+  const handleLeave = useCallback(() => {
+    const el = ref.current
+    if (!el) return
+    el.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)'
+  }, [])
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    el.addEventListener('mousemove', handleMove)
+    el.addEventListener('mouseleave', handleLeave)
+    return () => {
+      el.removeEventListener('mousemove', handleMove)
+      el.removeEventListener('mouseleave', handleLeave)
+    }
+  }, [handleMove, handleLeave])
+
+  return ref
+}
 
 /* ─────────── DATA ─────────── */
 
@@ -187,11 +261,11 @@ function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/8">
+    <header className="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-white/8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="Now & Always Construction — Home">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-md flex items-center justify-center">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-md flex items-center justify-center float-slow">
               <span className="text-white font-bold text-base sm:text-xl" aria-hidden="true">N</span>
             </div>
             <div className="leading-none">
@@ -215,14 +289,14 @@ function Header() {
           <div className="flex items-center gap-2.5">
             <a
               href="tel:0670318635"
-              className="hidden sm:inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white text-[13px] font-semibold px-4 py-2.5 rounded-md transition-colors duration-200 min-h-[44px]"
+              className="hidden sm:inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-[13px] font-semibold px-4 py-2.5 rounded-md haptic-glow min-h-[44px]"
             >
               <Phone className="w-4 h-4" aria-hidden="true" />
               067 031 8635
             </a>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden text-white p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="lg:hidden text-white p-2 min-w-[44px] min-h-[44px] flex items-center justify-center haptic-ripple rounded-lg"
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileOpen}
             >
@@ -233,7 +307,7 @@ function Header() {
       </div>
 
       {mobileOpen && (
-        <div className="lg:hidden bg-black/95 border-t border-white/8" role="dialog" aria-label="Mobile navigation">
+        <div className="lg:hidden glass-strong border-t border-white/8" role="dialog" aria-label="Mobile navigation">
           <nav className="flex flex-col px-6 py-5 gap-4" aria-label="Mobile navigation">
             {NAV_LINKS.map((link) => (
               <Link
@@ -247,7 +321,7 @@ function Header() {
             ))}
             <a
               href="tel:0670318635"
-              className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white text-[14px] font-semibold px-5 py-3 rounded-md mt-1 min-h-[44px]"
+              className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white text-[14px] font-semibold px-5 py-3 rounded-md mt-1 haptic-press min-h-[44px]"
             >
               <Phone className="w-4 h-4" aria-hidden="true" />
               067 031 8635
@@ -272,28 +346,32 @@ function HeroSection() {
       />
       <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/40" />
 
+      {/* Decorative floating glass orbs */}
+      <div className="absolute top-1/4 right-1/4 w-64 h-64 rounded-full glass-blue opacity-30 float-slow hidden lg:block" />
+      <div className="absolute bottom-1/3 right-1/6 w-40 h-40 rounded-full glass opacity-20 float-medium hidden lg:block" />
+
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-40">
-        <p className="text-blue-400 text-[11px] sm:text-xs lg:text-sm font-semibold tracking-[0.2em] sm:tracking-[0.25em] uppercase mb-4 sm:mb-5">
+        <p className="scroll-reveal text-blue-400 text-[11px] sm:text-xs lg:text-sm font-semibold tracking-[0.2em] sm:tracking-[0.25em] uppercase mb-4 sm:mb-5">
           Now and Always (Pty) Ltd
         </p>
-        <h1 className="text-[1.85rem] sm:text-5xl md:text-[3.4rem] lg:text-6xl font-extrabold text-white uppercase leading-[1.1] max-w-4xl tracking-tight">
+        <h1 className="scroll-reveal stagger-1 text-[1.85rem] sm:text-5xl md:text-[3.4rem] lg:text-6xl font-extrabold text-white uppercase leading-[1.1] max-w-4xl tracking-tight">
           Construction &amp;<br className="hidden sm:block" /> Maintenance You Can Rely On
         </h1>
-        <p className="mt-5 sm:mt-6 text-gray-300 text-[15px] sm:text-lg max-w-xl leading-[1.6]">
+        <p className="scroll-reveal stagger-2 mt-5 sm:mt-6 text-gray-300 text-[15px] sm:text-lg max-w-xl leading-[1.6]">
           Building, renovations, plumbing, and electrical work across Newcastle and greater South Africa. Registered, insured, and on schedule.
         </p>
 
-        <div className="mt-6 sm:mt-8 flex flex-wrap gap-2.5 sm:gap-3">
+        <div className="scroll-reveal stagger-3 mt-6 sm:mt-8 flex flex-wrap gap-2.5 sm:gap-3">
           <a
             href="#contact"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-5 sm:px-6 py-3 rounded-md transition-colors duration-200 text-[13px] sm:text-base min-h-[44px]"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-5 sm:px-6 py-3 rounded-md text-[13px] sm:text-base min-h-[44px] haptic-glow"
           >
             Get a free quote
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </a>
           <a
             href="tel:0670318635"
-            className="inline-flex items-center gap-2 border border-white/20 hover:bg-white/8 active:bg-white/12 text-white font-semibold px-5 sm:px-6 py-3 rounded-md transition-colors duration-200 text-[13px] sm:text-base min-h-[44px]"
+            className="inline-flex items-center gap-2 glass hover:bg-white/12 text-white font-semibold px-5 sm:px-6 py-3 rounded-md text-[13px] sm:text-base min-h-[44px] haptic-press"
           >
             <Phone className="w-4 h-4" aria-hidden="true" />
             Call us
@@ -302,7 +380,7 @@ function HeroSection() {
             href="https://wa.me/27670318635"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 border border-white/20 hover:bg-white/8 active:bg-white/12 text-white font-semibold px-5 sm:px-6 py-3 rounded-md transition-colors duration-200 text-[13px] sm:text-base min-h-[44px]"
+            className="inline-flex items-center gap-2 glass hover:bg-white/12 text-white font-semibold px-5 sm:px-6 py-3 rounded-md text-[13px] sm:text-base min-h-[44px] haptic-press"
           >
             <MessageCircle className="w-4 h-4" aria-hidden="true" />
             WhatsApp
@@ -310,7 +388,7 @@ function HeroSection() {
         </div>
 
         {/* Trust marks */}
-        <div className="mt-8 sm:mt-12 flex flex-wrap gap-4 sm:gap-6 lg:gap-8">
+        <div className="scroll-reveal stagger-4 mt-8 sm:mt-12 flex flex-wrap gap-4 sm:gap-6 lg:gap-8">
           {TRUST_MARKS.map((mark) => (
             <div key={mark.label} className="flex items-center gap-2">
               <mark.icon className="w-4 h-4 text-blue-400/70" aria-hidden="true" />
@@ -327,11 +405,14 @@ function HeroSection() {
 }
 
 function ServicesSection() {
+  const sectionRef = useScrollReveal()
+  const tiltRef1 = useTilt()
+
   return (
-    <section id="services" className="bg-[#0a0a0b] py-14 sm:py-20 lg:py-28" aria-label="Services">
+    <section id="services" ref={sectionRef} className="bg-[#0a0a0b] py-14 sm:py-20 lg:py-28" aria-label="Services">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 mb-10 sm:mb-14">
-          <div className="max-w-lg">
+          <div className="scroll-slide-left">
             <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2">
               What we do
             </p>
@@ -341,24 +422,25 @@ function ServicesSection() {
           </div>
           <Link
             href="/gallery"
-            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-semibold text-[13px] sm:text-sm transition-colors duration-200"
+            className="scroll-slide-right inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-semibold text-[13px] sm:text-sm transition-colors duration-200"
           >
             View past projects
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </div>
 
-        {/* Bento-style grid: 2 wide + 2 narrow on lg */}
+        {/* Bento-style grid with 3D tilt + glass */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {SERVICES.map((service, i) => (
             <a
               key={service.title}
               href="#contact"
-              className={`group bg-[#111113] hover:bg-[#161618] border border-white/5 hover:border-blue-500/20 rounded-lg p-4 sm:p-5 lg:p-6 transition-all duration-200 flex flex-col ${
+              ref={i === 0 ? tiltRef1 : undefined}
+              className={`scroll-scale stagger-${i + 1} group glass tilt-card hover:border-blue-500/20 rounded-lg p-4 sm:p-5 lg:p-6 flex flex-col haptic-lift ${
                 i === 0 ? 'sm:col-span-2 sm:row-span-2 sm:p-6 lg:p-8' : ''
               }`}
             >
-              <div className={`${i === 0 ? 'w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16' : 'w-10 h-10 sm:w-11 sm:h-11 lg:w-12 lg:h-12'} bg-blue-600/8 group-hover:bg-blue-600/15 rounded-lg flex items-center justify-center mb-3 sm:mb-4 transition-colors duration-200`}>
+              <div className={`${i === 0 ? 'w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16' : 'w-10 h-10 sm:w-11 sm:h-11 lg:w-12 lg:h-12'} glass-blue rounded-lg flex items-center justify-center mb-3 sm:mb-4 transition-colors duration-200`}>
                 <service.icon className={`${i === 0 ? 'w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8' : 'w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6'} text-blue-400`} aria-hidden="true" />
               </div>
               <h3 className="text-white font-bold text-[15px] sm:text-base lg:text-lg uppercase tracking-wide mb-1.5 sm:mb-2">
@@ -379,6 +461,7 @@ function ServicesSection() {
 }
 
 function FeaturedProjectsSection() {
+  const sectionRef = useScrollReveal()
   const categoryIcon = (cat: string) => {
     switch (cat) {
       case 'Building': return Building2
@@ -390,9 +473,9 @@ function FeaturedProjectsSection() {
   }
 
   return (
-    <section id="projects" className="bg-[#0a0a0b] py-14 sm:py-20 lg:py-28 border-t border-white/5" aria-label="Featured projects">
+    <section id="projects" ref={sectionRef} className="bg-[#0a0a0b] py-14 sm:py-20 lg:py-28 border-t border-white/5" aria-label="Featured projects">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-10 sm:mb-14">
+        <div className="mb-10 sm:mb-14 scroll-reveal">
           <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2">
             Recent work
           </p>
@@ -404,7 +487,7 @@ function FeaturedProjectsSection() {
           </p>
         </div>
 
-        {/* Bento-style featured grid: hero image + smaller cards */}
+        {/* Bento-style featured grid */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 auto-rows-[140px] sm:auto-rows-[200px] lg:auto-rows-[220px]">
           {FEATURED_IMAGES.map((image, i) => {
             const Icon = categoryIcon(image.category)
@@ -412,17 +495,17 @@ function FeaturedProjectsSection() {
             return (
               <div
                 key={image.src}
-                className={`group relative overflow-hidden rounded-lg cursor-pointer ${isLarge ? 'col-span-2 sm:col-span-2 lg:col-span-1 row-span-2' : ''}`}
+                className={`scroll-scale stagger-${i + 1} group relative overflow-hidden rounded-lg cursor-pointer haptic-lift ${isLarge ? 'col-span-2 sm:col-span-2 lg:col-span-1 row-span-2' : ''}`}
               >
                 <img
                   src={image.src}
                   alt={image.alt}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.08]"
                   loading="lazy"
                   width={isLarge ? 800 : 400}
                   height={isLarge ? 600 : 300}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-3 sm:p-4 lg:p-5">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-3 sm:p-4 lg:p-5">
                   <div className="flex items-center gap-1 mb-1">
                     <Icon className="w-3 h-3 text-blue-400" aria-hidden="true" />
                     <span className="text-blue-300 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.15em]">
@@ -438,10 +521,10 @@ function FeaturedProjectsSection() {
           })}
         </div>
 
-        <div className="mt-8 sm:mt-10 lg:mt-12 text-center">
+        <div className="mt-8 sm:mt-10 lg:mt-12 text-center scroll-reveal">
           <Link
             href="/gallery"
-            className="group inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-6 sm:px-7 py-3 sm:py-3.5 rounded-md transition-colors duration-200 text-[13px] sm:text-sm min-h-[44px]"
+            className="group inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 sm:px-7 py-3 sm:py-3.5 rounded-md text-[13px] sm:text-sm min-h-[44px] haptic-glow"
           >
             <Eye className="w-4 h-4" aria-hidden="true" />
             View full gallery
@@ -454,10 +537,12 @@ function FeaturedProjectsSection() {
 }
 
 function TrustedBySection() {
+  const sectionRef = useScrollReveal()
+
   return (
-    <section className="bg-[#0a0a0b] py-12 sm:py-16 lg:py-20 border-t border-white/5" aria-label="Trusted by">
+    <section ref={sectionRef} className="bg-[#0a0a0b] py-12 sm:py-16 lg:py-20 border-t border-white/5" aria-label="Trusted by">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8 sm:mb-12">
+        <div className="text-center mb-8 sm:mb-12 scroll-reveal">
           <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2">
             Trusted by leading organisations
           </p>
@@ -472,10 +557,10 @@ function TrustedBySection() {
         {/* Mobile: horizontal scroll; Desktop: grid */}
         <div className="-mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide">
           <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-7 gap-3 sm:gap-4 lg:gap-6 items-center min-w-[320px]">
-            {TRUSTED_CLIENTS.map((client) => (
+            {TRUSTED_CLIENTS.map((client, i) => (
               <div
                 key={client.name}
-                className="group flex flex-col items-center justify-center bg-[#111113] border border-white/5 hover:border-blue-500/20 rounded-lg p-3 sm:p-4 lg:p-5 transition-all duration-200 aspect-square sm:aspect-auto sm:h-28"
+                className={`scroll-scale stagger-${i + 1} group glass hover:border-blue-500/20 rounded-lg p-3 sm:p-4 lg:p-5 transition-all duration-300 aspect-square sm:aspect-auto sm:h-28 haptic-lift`}
               >
                 <img
                   src={client.logo}
@@ -500,6 +585,7 @@ function TrustedBySection() {
 function TestimonialsSection() {
   const [current, setCurrent] = useState(0)
   const [showRefLetter, setShowRefLetter] = useState(false)
+  const sectionRef = useScrollReveal()
 
   const prev = () => { setCurrent((c) => (c === 0 ? TESTIMONIALS.length - 1 : c - 1)); setShowRefLetter(false) }
   const next = () => { setCurrent((c) => (c === TESTIMONIALS.length - 1 ? 0 : c + 1)); setShowRefLetter(false) }
@@ -507,9 +593,9 @@ function TestimonialsSection() {
   const activeTestimonial = TESTIMONIALS[current]
 
   return (
-    <section id="about" className="bg-[#0a0a0b] py-16 sm:py-20 lg:py-28 border-t border-white/5" aria-label="Client testimonials">
+    <section id="about" ref={sectionRef} className="bg-[#0a0a0b] py-16 sm:py-20 lg:py-28 border-t border-white/5" aria-label="Client testimonials">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8 sm:mb-14">
+        <div className="text-center mb-8 sm:mb-14 scroll-reveal">
           <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2">
             Client feedback
           </p>
@@ -518,14 +604,14 @@ function TestimonialsSection() {
           </h2>
         </div>
 
-        <div className="relative max-w-3xl mx-auto">
-          <div className="bg-[#111113] border border-white/5 rounded-lg p-5 sm:p-8 lg:p-10">
+        <div className="relative max-w-3xl mx-auto scroll-scale">
+          <div className="glass-strong rounded-lg p-5 sm:p-8 lg:p-10">
             {/* Company logo + quote */}
             <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-5">
               <img
                 src={activeTestimonial.logo}
                 alt={`${activeTestimonial.company} logo`}
-                className="w-10 h-10 sm:w-14 sm:h-14 object-contain rounded-lg bg-white/5 p-1 sm:p-1.5 shrink-0"
+                className="w-10 h-10 sm:w-14 sm:h-14 object-contain rounded-lg glass p-1 sm:p-1.5 shrink-0"
                 loading="lazy"
                 width={56}
                 height={56}
@@ -548,7 +634,7 @@ function TestimonialsSection() {
               <div className="mt-4 sm:mt-5">
                 <button
                   onClick={() => setShowRefLetter(!showRefLetter)}
-                  className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 text-xs sm:text-sm font-semibold transition-colors duration-200 min-h-[44px]"
+                  className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 text-xs sm:text-sm font-semibold transition-colors duration-200 min-h-[44px] haptic-press"
                 >
                   <FileText className="w-4 h-4" aria-hidden="true" />
                   {showRefLetter ? 'Hide reference letter' : 'View reference letter'}
@@ -556,7 +642,7 @@ function TestimonialsSection() {
                 </button>
 
                 {showRefLetter && (
-                  <div className="mt-3 sm:mt-4 bg-[#0d0d0e] border border-white/8 rounded-lg p-4 sm:p-6 text-sm leading-[1.7] text-gray-300">
+                  <div className="mt-3 sm:mt-4 glass rounded-lg p-4 sm:p-6 text-sm leading-[1.7] text-gray-300">
                     <div className="flex items-center gap-2 mb-3 pb-3 border-b border-white/5">
                       <div className="w-7 h-7 bg-green-600/15 rounded flex items-center justify-center shrink-0">
                         <FileText className="w-3.5 h-3.5 text-green-400" aria-hidden="true" />
@@ -569,7 +655,7 @@ function TestimonialsSection() {
                         href={activeTestimonial.referenceLetter}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="ml-auto inline-flex items-center gap-1.5 text-blue-400 hover:text-blue-300 text-[11px] font-semibold bg-blue-600/10 hover:bg-blue-600/15 px-3 py-1.5 rounded-md transition-colors duration-200 min-h-[44px]"
+                        className="ml-auto inline-flex items-center gap-1.5 text-blue-400 hover:text-blue-300 text-[11px] font-semibold glass-blue hover:bg-blue-600/15 px-3 py-1.5 rounded-md transition-colors duration-200 min-h-[44px]"
                       >
                         <ExternalLink className="w-3 h-3" aria-hidden="true" />
                         Open PDF
@@ -604,14 +690,14 @@ function TestimonialsSection() {
 
           <button
             onClick={prev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-12 w-10 h-10 sm:w-11 sm:h-11 bg-[#111113] hover:bg-blue-600/15 border border-white/8 rounded-full flex items-center justify-center transition-colors duration-200 min-w-[44px] min-h-[44px]"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-12 w-10 h-10 sm:w-11 sm:h-11 glass hover:bg-blue-600/15 border border-white/8 rounded-full flex items-center justify-center transition-colors duration-200 min-w-[44px] min-h-[44px] haptic-ripple"
             aria-label="Previous testimonial"
           >
             <ChevronLeft className="w-5 h-5 text-white" />
           </button>
           <button
             onClick={next}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-12 w-10 h-10 sm:w-11 sm:h-11 bg-[#111113] hover:bg-blue-600/15 border border-white/8 rounded-full flex items-center justify-center transition-colors duration-200 min-w-[44px] min-h-[44px]"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-12 w-10 h-10 sm:w-11 sm:h-11 glass hover:bg-blue-600/15 border border-white/8 rounded-full flex items-center justify-center transition-colors duration-200 min-w-[44px] min-h-[44px] haptic-ripple"
             aria-label="Next testimonial"
           >
             <ChevronRight className="w-5 h-5 text-white" />
@@ -624,9 +710,9 @@ function TestimonialsSection() {
                 <button
                   key={i}
                   onClick={() => { setCurrent(i); setShowRefLetter(false) }}
-                  className={`transition-all duration-200 min-h-[36px] sm:min-h-[28px] flex items-center justify-center rounded-full px-3 sm:px-2.5 py-1.5 sm:py-1 ${
+                  className={`transition-all duration-200 min-h-[36px] sm:min-h-[28px] flex items-center justify-center rounded-full px-3 sm:px-2.5 py-1.5 sm:py-1 haptic-press ${
                     i === current
-                      ? 'bg-blue-600/15 text-blue-400'
+                      ? 'glass-blue text-blue-400'
                       : 'text-gray-600 hover:text-gray-400'
                   }`}
                   role="tab"
@@ -652,27 +738,131 @@ function CTASection() {
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0b] via-blue-950/15 to-[#0a0a0b]" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-[1.75rem] sm:text-4xl lg:text-[2.75rem] font-extrabold text-white uppercase leading-[1.1] tracking-tight mb-3 sm:mb-4">
+        <h2 className="scroll-reveal text-[1.75rem] sm:text-4xl lg:text-[2.75rem] font-extrabold text-white uppercase leading-[1.1] tracking-tight mb-3 sm:mb-4">
           Ready to start?
         </h2>
-        <p className="text-gray-300 text-[14px] sm:text-base lg:text-lg max-w-lg mx-auto mb-6 sm:mb-8 leading-[1.6]">
+        <p className="scroll-reveal stagger-1 text-gray-300 text-[14px] sm:text-base lg:text-lg max-w-lg mx-auto mb-6 sm:mb-8 leading-[1.6]">
           Call us for a free on-site assessment and written quotation. No obligation.
         </p>
-        <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3">
+        <div className="scroll-reveal stagger-2 flex flex-wrap justify-center gap-2.5 sm:gap-3">
           <a
             href="#contact"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-5 sm:px-7 py-3 sm:py-3.5 rounded-md transition-colors duration-200 text-[13px] sm:text-base min-h-[44px]"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-5 sm:px-7 py-3 sm:py-3.5 rounded-md text-[13px] sm:text-base min-h-[44px] haptic-glow"
           >
             Get a free quote
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </a>
           <a
             href="tel:0670318635"
-            className="inline-flex items-center gap-2 bg-white/8 hover:bg-white/12 active:bg-white/16 text-white font-semibold px-5 sm:px-7 py-3 sm:py-3.5 rounded-md transition-colors duration-200 text-[13px] sm:text-base min-h-[44px]"
+            className="inline-flex items-center gap-2 glass hover:bg-white/12 text-white font-semibold px-5 sm:px-7 py-3 sm:py-3.5 rounded-md text-[13px] sm:text-base min-h-[44px] haptic-press"
           >
             <Phone className="w-4 h-4" aria-hidden="true" />
             067 031 8635
           </a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─────────── MAP SECTION ─────────── */
+
+function MapSection() {
+  const sectionRef = useScrollReveal()
+
+  return (
+    <section ref={sectionRef} className="bg-[#0a0a0b] py-14 sm:py-20 lg:py-28 border-t border-white/5" aria-label="Our location">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="scroll-reveal text-center mb-10 sm:mb-14">
+          <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2">
+            Find us
+          </p>
+          <h2 className="text-[1.75rem] sm:text-4xl lg:text-[2.75rem] font-extrabold text-white uppercase leading-[1.1] tracking-tight">
+            Our location
+          </h2>
+          <p className="mt-2 sm:mt-3 text-gray-400 text-[14px] sm:text-base max-w-lg mx-auto leading-[1.6]">
+            Based in Newcastle, KwaZulu-Natal — serving clients across South Africa. Visit us or give us a call.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-6">
+          {/* Map embed */}
+          <div className="lg:col-span-3 scroll-slide-left rounded-lg overflow-hidden border border-white/5 h-[300px] sm:h-[400px] lg:h-[460px]">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55251.37783998458!2d29.8896!3d-27.7579!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ee6b1c0e3bc9a43%3A0x5cf1f0b0a6f0e8c8!2sNewcastle%2C%20South%20Africa!5e0!3m2!1sen!2sza!4v1700000000000!5m2!1sen!2sza"
+              width="100%"
+              height="100%"
+              style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) brightness(0.95) contrast(0.9)' }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Now & Always Construction — Newcastle, KwaZulu-Natal"
+            />
+          </div>
+
+          {/* Contact info card */}
+          <div className="lg:col-span-2 scroll-slide-right">
+            <div className="glass-strong rounded-lg p-5 sm:p-6 lg:p-8 h-full flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 glass-blue rounded-lg flex items-center justify-center float-slow">
+                    <MapPin className="w-5 h-5 text-blue-400" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <p className="text-white font-bold text-sm sm:text-base">Newcastle, KZN</p>
+                    <p className="text-gray-500 text-[11px] sm:text-xs">South Africa</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <a href="tel:0670318635" className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
+                    <div className="w-9 h-9 glass-blue rounded-lg flex items-center justify-center shrink-0">
+                      <Phone className="w-4 h-4 text-blue-400" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Phone</p>
+                      <p className="text-white text-sm font-semibold group-hover:text-blue-400 transition-colors">067 031 8635</p>
+                    </div>
+                  </a>
+
+                  <a href="https://wa.me/27670318635" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
+                    <div className="w-9 h-9 glass-blue rounded-lg flex items-center justify-center shrink-0">
+                      <MessageCircle className="w-4 h-4 text-blue-400" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">WhatsApp</p>
+                      <p className="text-white text-sm font-semibold group-hover:text-blue-400 transition-colors">Chat with us</p>
+                    </div>
+                  </a>
+
+                  <a href="mailto:projects@nowandalways.co.za" className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
+                    <div className="w-9 h-9 glass-blue rounded-lg flex items-center justify-center shrink-0">
+                      <Mail className="w-4 h-4 text-blue-400" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Email</p>
+                      <p className="text-white text-sm font-semibold group-hover:text-blue-400 transition-colors break-all">projects@nowandalways.co.za</p>
+                    </div>
+                  </a>
+
+                  <a href="https://maps.google.com/?q=Newcastle,KwaZulu-Natal,South+Africa" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
+                    <div className="w-9 h-9 glass-blue rounded-lg flex items-center justify-center shrink-0">
+                      <Navigation className="w-4 h-4 text-blue-400" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Directions</p>
+                      <p className="text-white text-sm font-semibold group-hover:text-blue-400 transition-colors">Open in Google Maps</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-white/5">
+                <p className="text-gray-600 text-[11px] uppercase tracking-wider font-medium">Registration</p>
+                <p className="text-gray-400 text-xs mt-1">2021/438875/07</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -776,13 +966,13 @@ function Footer() {
             &copy; {year ?? 2026} Now &amp; Always (PTY) LTD. All rights reserved.
           </p>
           <div className="flex items-center gap-3">
-            <a href="#" className="text-gray-600 hover:text-white transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Facebook">
+            <a href="#" className="text-gray-600 hover:text-white transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center haptic-ripple rounded-lg" aria-label="Facebook">
               <Facebook className="w-4 h-4" />
             </a>
-            <a href="#" className="text-gray-600 hover:text-white transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Instagram">
+            <a href="#" className="text-gray-600 hover:text-white transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center haptic-ripple rounded-lg" aria-label="Instagram">
               <Instagram className="w-4 h-4" />
             </a>
-            <a href="#" className="text-gray-600 hover:text-white transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="LinkedIn">
+            <a href="#" className="text-gray-600 hover:text-white transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center haptic-ripple rounded-lg" aria-label="LinkedIn">
               <Linkedin className="w-4 h-4" />
             </a>
           </div>
@@ -795,8 +985,10 @@ function Footer() {
 /* ─────────── PAGE ─────────── */
 
 export default function Home() {
+  const pageRef = useScrollReveal()
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div ref={pageRef} className="min-h-screen flex flex-col">
       <Header />
       <main id="main-content" className="flex-1">
         <HeroSection />
@@ -805,6 +997,7 @@ export default function Home() {
         <TrustedBySection />
         <TestimonialsSection />
         <CTASection />
+        <MapSection />
       </main>
       <Footer />
     </div>
