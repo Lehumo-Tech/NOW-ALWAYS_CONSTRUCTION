@@ -66,21 +66,58 @@ const SERVICES = [
   },
 ]
 
+const TRUSTED_CLIENTS = [
+  { name: 'Mediclinic', logo: '/logos/mediclinic.png' },
+  { name: 'Bosch Car Service', logo: '/logos/bosch-car-service.png' },
+  { name: 'Discovery Insurance', logo: '/logos/discovery.png' },
+  { name: 'Dr Els Dentistry', logo: '/logos/dr-els-dentistry.png' },
+  { name: 'Hope High School', logo: '/logos/hope-high-school.png' },
+  { name: 'Majuba TVET College', logo: '/logos/majuba-college.png' },
+  { name: 'NL Cars', logo: '/logos/nl-cars.png' },
+]
+
 const TESTIMONIALS = [
   {
-    text: 'We had a burst geyser at 10 pm on a Sunday. Thabo from Now & Always arrived within the hour and had the replacement installed by morning. Fair price, solid work.',
-    author: 'Thabo M.',
-    role: 'Homeowner — Newcastle',
+    text: 'Now & Always handled the full plumbing and electrical retrofit of our Newcastle facility. Their team worked around our operating hours so we never had to close a ward. Professional, quiet, and always on schedule — exactly what a hospital environment demands.',
+    author: 'Facilities Manager',
+    company: 'Mediclinic',
+    logo: '/logos/mediclinic.png',
   },
   {
-    text: 'They renovated our 240 m² office space in four weeks, exactly as quoted. The site was clean every evening and the team communicated daily on progress.',
-    author: 'Sarah K.',
-    role: 'Business Owner — Johannesburg',
+    text: 'We needed a complete workshop refit — new drainage, electrical upgrades for diagnostic equipment, and a fresh coat throughout. Now & Always quoted fairly, showed up when they said they would, and handed over a spotless workshop two days ahead of schedule.',
+    author: 'Workshop Director',
+    company: 'Bosch Car Service',
+    logo: '/logos/bosch-car-service.png',
   },
   {
-    text: 'After three failed contractors, Now & Always rewired our entire block of flats — 12 units — on schedule and on budget. Proper COC paperwork, no shortcuts.',
-    author: 'David R.',
-    role: 'Property Manager — Durban',
+    text: 'From boardroom renovations to backup-power installations across our Newcastle office, Now & Always has been our go-to contractor for three years running. Their paperwork is always in order and their quotes have never once crept beyond the agreed figure.',
+    author: 'Regional Facilities Lead',
+    company: 'Discovery Insurance',
+    logo: '/logos/discovery.png',
+  },
+  {
+    text: 'The renovation of our dental suites had to meet very specific hygiene and airflow standards. Now & Always understood the requirements from day one, coordinated with our equipment suppliers, and delivered a space our patients feel comfortable in.',
+    author: 'Practice Manager',
+    company: 'Dr Els Dentistry',
+    logo: '/logos/dr-els-dentistry.png',
+  },
+  {
+    text: 'They built our new administrative block and refurbished two existing classrooms over the school holidays. The site was safe, clean, and ready for learners on the first day of term. We have already commissioned them for the next phase.',
+    author: 'School Governing Body Chair',
+    company: 'Hope High School',
+    logo: '/logos/hope-high-school.png',
+  },
+  {
+    text: 'Majuba College has multiple campuses, and Now & Always has handled maintenance, plumbing, and electrical upgrades across all of them. Their ability to scale without losing quality is why they remain on our approved vendor list year after year.',
+    author: 'Campus Operations Manager',
+    company: 'Majuba TVET College',
+    logo: '/logos/majuba-college.png',
+  },
+  {
+    text: 'Our showroom and workshop needed a full overhaul — flooring, lighting, plumbing, and signage. Now & Always managed every trade under one contract, which meant one point of contact and one invoice. That simplicity is worth a lot in our line of business.',
+    author: 'Dealership Principal',
+    company: 'NL Cars',
+    logo: '/logos/nl-cars.png',
   },
 ]
 
@@ -413,6 +450,48 @@ function FeaturedProjectsSection() {
   )
 }
 
+function TrustedBySection() {
+  return (
+    <section className="bg-[#0a0a0b] py-16 sm:py-20 border-t border-white/5" aria-label="Trusted by">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-10 sm:mb-12">
+          <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2">
+            Trusted by leading organisations
+          </p>
+          <h2 className="text-[1.75rem] sm:text-4xl lg:text-[2.75rem] font-extrabold text-white uppercase leading-[1.1] tracking-tight">
+            Companies that trust us
+          </h2>
+          <p className="mt-3 text-gray-400 text-base max-w-lg mx-auto leading-[1.6]">
+            From healthcare to education, automotive to insurance — our clients come back because we deliver on our word.
+          </p>
+        </div>
+
+        {/* Logo marquee grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4 sm:gap-6 items-center">
+          {TRUSTED_CLIENTS.map((client) => (
+            <div
+              key={client.name}
+              className="group flex flex-col items-center justify-center bg-[#111113] border border-white/5 hover:border-blue-500/20 rounded-lg p-4 sm:p-5 transition-all duration-200 aspect-square sm:aspect-auto sm:h-28"
+            >
+              <img
+                src={client.logo}
+                alt={`${client.name} logo`}
+                className="max-h-10 sm:max-h-12 w-auto object-contain opacity-60 group-hover:opacity-90 transition-opacity duration-200"
+                loading="lazy"
+                width={120}
+                height={48}
+              />
+              <span className="text-gray-500 text-[10px] sm:text-[11px] font-medium mt-2 tracking-wide uppercase text-center group-hover:text-gray-300 transition-colors duration-200">
+                {client.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function TestimonialsSection() {
   const [current, setCurrent] = useState(0)
 
@@ -431,16 +510,28 @@ function TestimonialsSection() {
           </h2>
         </div>
 
-        <div className="relative max-w-2xl mx-auto">
+        <div className="relative max-w-3xl mx-auto">
           <div className="bg-[#111113] border border-white/5 rounded-lg p-6 sm:p-10">
-            <Quote className="w-8 h-8 text-blue-400/20 mb-5" aria-hidden="true" />
-            <blockquote className="text-white text-base sm:text-lg leading-[1.6] mb-6 min-h-[80px]">
+            {/* Company logo + quote */}
+            <div className="flex items-start gap-4 mb-5">
+              <img
+                src={TESTIMONIALS[current].logo}
+                alt={`${TESTIMONIALS[current].company} logo`}
+                className="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-lg bg-white/5 p-1.5 shrink-0"
+                loading="lazy"
+                width={56}
+                height={56}
+              />
+              <div className="min-w-0">
+                <p className="text-white font-bold text-sm sm:text-base">{TESTIMONIALS[current].company}</p>
+                <p className="text-blue-400 text-xs sm:text-sm font-medium">{TESTIMONIALS[current].author}</p>
+              </div>
+              <Quote className="w-8 h-8 text-blue-400/15 ml-auto shrink-0 hidden sm:block" aria-hidden="true" />
+            </div>
+
+            <blockquote className="text-white text-base sm:text-lg leading-[1.7] min-h-[100px] sm:min-h-[80px]">
               &ldquo;{TESTIMONIALS[current].text}&rdquo;
             </blockquote>
-            <div>
-              <p className="text-white font-semibold text-sm">{TESTIMONIALS[current].author}</p>
-              <p className="text-gray-500 text-sm">{TESTIMONIALS[current].role}</p>
-            </div>
           </div>
 
           <button
@@ -458,19 +549,23 @@ function TestimonialsSection() {
             <ChevronRight className="w-5 h-5 text-white" />
           </button>
 
-          <div className="flex justify-center gap-2 mt-7" role="tablist" aria-label="Testimonial navigation">
-            {TESTIMONIALS.map((_, i) => (
+          <div className="flex justify-center gap-1.5 mt-7 flex-wrap" role="tablist" aria-label="Testimonial navigation">
+            {TESTIMONIALS.map((t, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
-                className={`w-2 h-2 rounded-full transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center ${
-                  i === current ? 'text-blue-400' : 'text-white/20 hover:text-white/40'
+                className={`transition-all duration-200 min-w-[44px] min-h-[28px] flex items-center justify-center rounded-full px-2.5 py-1 ${
+                  i === current
+                    ? 'bg-blue-600/15 text-blue-400'
+                    : 'text-gray-600 hover:text-gray-400'
                 }`}
                 role="tab"
                 aria-selected={i === current}
-                aria-label={`Testimonial ${i + 1}`}
+                aria-label={`${t.company} testimonial`}
               >
-                <span className={`block w-2 h-2 rounded-full ${i === current ? 'bg-blue-400' : 'bg-current'}`} />
+                <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide whitespace-nowrap">
+                  {t.company}
+                </span>
               </button>
             ))}
           </div>
@@ -636,6 +731,7 @@ export default function Home() {
         <HeroSection />
         <ServicesSection />
         <FeaturedProjectsSection />
+        <TrustedBySection />
         <TestimonialsSection />
         <CTASection />
       </main>

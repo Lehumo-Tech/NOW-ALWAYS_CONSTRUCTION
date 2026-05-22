@@ -104,7 +104,7 @@ const STATS = [
   { value: '50+', label: 'Projects completed' },
   { value: '2021', label: 'Founded' },
   { value: '100%', label: 'Certs & compliance' },
-  { value: ' Nationwide', label: 'Coverage' },
+  { value: '7+', label: 'Trusted clients' },
 ]
 
 /* ─────────── HEADER ─────────── */
