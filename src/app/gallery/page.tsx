@@ -589,6 +589,12 @@ function GalleryContent() {
 /* ─────────── FOOTER ─────────── */
 
 function Footer() {
+  const [year, setYear] = useState<number | null>(null)
+
+  useEffect(() => {
+    setYear(new Date().getFullYear())
+  }, [])
+
   return (
     <footer className="bg-[#080809] border-t border-white/5 pt-14 pb-8" role="contentinfo">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -665,7 +671,7 @@ function Footer() {
 
         <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-gray-600 text-xs">
-            &copy; {new Date().getFullYear()} Now &amp; Always (PTY) LTD. All rights reserved.
+            &copy; {year ?? 2026} Now &amp; Always (PTY) LTD. All rights reserved.
           </p>
           <div className="flex items-center gap-3">
             <a href="#" className="text-gray-600 hover:text-white transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Facebook">
