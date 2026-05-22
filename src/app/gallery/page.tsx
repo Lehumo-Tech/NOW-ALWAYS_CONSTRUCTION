@@ -281,33 +281,33 @@ function Lightbox({
 
 function GalleryBanner() {
   return (
-    <section className="relative pt-20 sm:pt-24 pb-14 sm:pb-18 overflow-hidden" aria-label="Gallery page header">
+    <section className="relative pt-20 sm:pt-24 pb-10 sm:pb-14 lg:pb-18 overflow-hidden" aria-label="Gallery page header">
       <div className="absolute inset-0 bg-gradient-to-b from-blue-950/20 via-[#0a0a0b] to-[#0a0a0b]" />
       <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M20 20h1v1h-1z\'/%3E%3C/g%3E%3C/svg%3E")' }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav className="flex items-center gap-2 text-sm mb-7" aria-label="Breadcrumb">
+        <nav className="flex items-center gap-2 text-sm mb-5 sm:mb-7" aria-label="Breadcrumb">
           <Link href="/" className="text-gray-500 hover:text-white transition-colors duration-200">Home</Link>
           <ChevronRight className="w-3.5 h-3.5 text-gray-700" aria-hidden="true" />
           <span className="text-blue-400 font-medium" aria-current="page">Gallery</span>
         </nav>
 
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 sm:gap-5">
           <div>
-            <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2.5">
+            <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2 sm:mb-2.5">
               Our portfolio
             </p>
-            <h1 className="text-[2rem] sm:text-5xl lg:text-[3.5rem] font-extrabold text-white uppercase leading-[1.05] tracking-tight">
+            <h1 className="text-[1.85rem] sm:text-5xl lg:text-[3.5rem] font-extrabold text-white uppercase leading-[1.05] tracking-tight">
               Project gallery
             </h1>
-            <p className="mt-3 text-gray-400 text-base max-w-lg leading-[1.6]">
+            <p className="mt-2 sm:mt-3 text-gray-400 text-[14px] sm:text-base max-w-lg leading-[1.6]">
               Completed projects across building, renovations, plumbing, and electrical work. Click any image for details.
             </p>
           </div>
 
           <Link
             href="/#contact"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-5 py-3 rounded-md transition-colors duration-200 text-sm self-start lg:self-auto min-h-[44px]"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-5 sm:px-5 py-2.5 sm:py-3 rounded-md transition-colors duration-200 text-[13px] sm:text-sm self-start lg:self-auto min-h-[44px]"
           >
             Start your project
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -359,64 +359,67 @@ function GalleryContent() {
   ]
 
   return (
-    <section className="bg-[#0a0a0b] pb-20 sm:pb-28" aria-label="Project gallery">
+    <section className="bg-[#0a0a0b] pb-14 sm:pb-20 lg:pb-28" aria-label="Project gallery">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6 sm:mb-8">
-          <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter by category">
-            {GALLERY_CATEGORIES.map((cat) => {
-              const Icon = categoryIcon(cat)
-              const isActive = activeCategory === cat
-              return (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-[13px] font-semibold tracking-wide uppercase transition-all duration-200 min-h-[44px] ${
-                    isActive
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-[#111113] text-gray-500 border border-white/5 hover:border-blue-500/20 hover:text-white'
-                  }`}
-                  role="tab"
-                  aria-selected={isActive}
-                >
-                  <Icon className="w-3.5 h-3.5" aria-hidden="true" />
-                  {cat}
-                </button>
-              )
-            })}
+        <div className="flex flex-col gap-3 mb-5 sm:mb-8">
+          <div className="-mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide">
+            <div className="flex gap-2 min-w-max sm:min-w-0 sm:flex-wrap" role="tablist" aria-label="Filter by category">
+              {GALLERY_CATEGORIES.map((cat) => {
+                const Icon = categoryIcon(cat)
+                const isActive = activeCategory === cat
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-[13px] font-semibold tracking-wide uppercase transition-all duration-200 min-h-[40px] sm:min-h-[44px] ${
+                      isActive
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-[#111113] text-gray-500 border border-white/5 hover:border-blue-500/20 hover:text-white'
+                    }`}
+                    role="tab"
+                    aria-selected={isActive}
+                  >
+                    <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5" aria-hidden="true" />
+                    {cat}
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
-          <div className="flex items-center gap-0.5 bg-[#111113] border border-white/5 rounded-md p-0.5" role="radiogroup" aria-label="Gallery layout">
-            {layoutConfig.map(({ key, icon: Icon, label }) => (
-              <button
-                key={key}
-                onClick={() => setLayout(key)}
-                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded text-xs font-medium transition-colors duration-200 min-h-[44px] ${
-                  layout === key
-                    ? 'bg-blue-600/15 text-blue-400'
-                    : 'text-gray-600 hover:text-gray-400'
-                }`}
-                role="radio"
-                aria-checked={layout === key}
-                aria-label={`${label} layout`}
-              >
-                <Icon className="w-3.5 h-3.5" aria-hidden="true" />
-                <span className="hidden sm:inline">{label}</span>
-              </button>
-            ))}
+          <div className="flex items-center justify-between sm:justify-end gap-3">
+            <p className="text-gray-600 text-[13px] sm:text-sm">
+              <span className="text-white font-medium">{filteredImages.length}</span> {filteredImages.length === 1 ? 'project' : 'projects'}
+              {activeCategory !== 'All' && (
+                <> in <span className="text-blue-400 font-medium">{activeCategory}</span></>
+              )}
+            </p>
+            <div className="flex items-center gap-0.5 bg-[#111113] border border-white/5 rounded-md p-0.5" role="radiogroup" aria-label="Gallery layout">
+              {layoutConfig.map(({ key, icon: Icon, label }) => (
+                <button
+                  key={key}
+                  onClick={() => setLayout(key)}
+                  className={`inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded text-[11px] sm:text-xs font-medium transition-colors duration-200 min-h-[40px] sm:min-h-[44px] ${
+                    layout === key
+                      ? 'bg-blue-600/15 text-blue-400'
+                      : 'text-gray-600 hover:text-gray-400'
+                  }`}
+                  role="radio"
+                  aria-checked={layout === key}
+                  aria-label={`${label} layout`}
+                >
+                  <Icon className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span className="hidden sm:inline">{label}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        <p className="text-gray-600 text-sm mb-5">
-          Showing <span className="text-white font-medium">{filteredImages.length}</span> {filteredImages.length === 1 ? 'project' : 'projects'}
-          {activeCategory !== 'All' && (
-            <> in <span className="text-blue-400 font-medium">{activeCategory}</span></>
-          )}
-        </p>
-
         {/* Masonry */}
         {layout === 'masonry' && (
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4 space-y-3 sm:space-y-4">
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-2 sm:gap-3 lg:gap-4 space-y-2 sm:space-y-3 lg:space-y-4">
             {filteredImages.map((image, index) => (
               <button
                 key={image.src}
@@ -432,17 +435,17 @@ function GalleryContent() {
                   width={400}
                   height={300}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-4 sm:p-5">
-                  <span className="inline-block self-start px-2.5 py-0.5 bg-blue-600/20 backdrop-blur-sm text-blue-300 text-[10px] font-semibold rounded-full uppercase tracking-[0.15em] mb-2">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-3 sm:p-4 lg:p-5">
+                  <span className="inline-block self-start px-2 py-0.5 bg-blue-600/20 backdrop-blur-sm text-blue-300 text-[9px] sm:text-[10px] font-semibold rounded-full uppercase tracking-[0.15em] mb-1.5 sm:mb-2">
                     {image.category}
                   </span>
-                  <p className="text-white text-sm font-medium leading-snug">
+                  <p className="text-white text-[11px] sm:text-sm font-medium leading-snug">
                     {image.alt}
                   </p>
-                  <p className="text-gray-400 text-xs mt-1 line-clamp-2 leading-[1.5]">{image.description}</p>
+                  <p className="text-gray-400 text-[10px] sm:text-xs mt-1 line-clamp-2 leading-[1.5]">{image.description}</p>
                 </div>
-                <div className="absolute top-2.5 right-2.5 w-8 h-8 bg-white/8 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <ZoomIn className="w-3.5 h-3.5 text-white" aria-hidden="true" />
+                <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 w-7 h-7 sm:w-8 sm:h-8 bg-white/8 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <ZoomIn className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-white" aria-hidden="true" />
                 </div>
               </button>
             ))}
@@ -451,7 +454,7 @@ function GalleryContent() {
 
         {/* Grid */}
         {layout === 'grid' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
             {filteredImages.map((image, index) => (
               <button
                 key={image.src}
@@ -467,17 +470,16 @@ function GalleryContent() {
                   width={400}
                   height={300}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-4 sm:p-5">
-                  <span className="inline-block self-start px-2.5 py-0.5 bg-blue-600/20 backdrop-blur-sm text-blue-300 text-[10px] font-semibold rounded-full uppercase tracking-[0.15em] mb-2">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-3 sm:p-4 lg:p-5">
+                  <span className="inline-block self-start px-2 py-0.5 bg-blue-600/20 backdrop-blur-sm text-blue-300 text-[9px] sm:text-[10px] font-semibold rounded-full uppercase tracking-[0.15em] mb-1.5 sm:mb-2">
                     {image.category}
                   </span>
-                  <p className="text-white text-sm font-medium leading-snug">
+                  <p className="text-white text-[11px] sm:text-sm font-medium leading-snug line-clamp-2">
                     {image.alt}
                   </p>
-                  <p className="text-gray-400 text-xs mt-1 line-clamp-2 leading-[1.5]">{image.description}</p>
                 </div>
-                <div className="absolute top-2.5 right-2.5 w-8 h-8 bg-white/8 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <ZoomIn className="w-3.5 h-3.5 text-white" aria-hidden="true" />
+                <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 w-7 h-7 sm:w-8 sm:h-8 bg-white/8 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <ZoomIn className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-white" aria-hidden="true" />
                 </div>
               </button>
             ))}
@@ -486,7 +488,7 @@ function GalleryContent() {
 
         {/* Full width */}
         {layout === 'fullwidth' && (
-          <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-2 sm:space-y-3 lg:space-y-4">
             {filteredImages.map((image, index) => (
               <button
                 key={image.src}
@@ -494,7 +496,7 @@ function GalleryContent() {
                 onClick={() => setLightboxIndex(index)}
                 aria-label={`View: ${image.alt}`}
               >
-                <div className="aspect-[21/9]">
+                <div className="aspect-[16/9] sm:aspect-[21/9]">
                   <img
                     src={image.src}
                     alt={image.alt}
@@ -505,14 +507,14 @@ function GalleryContent() {
                   />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent flex items-center">
-                  <div className="p-5 sm:p-8 lg:p-12 max-w-md">
-                    <span className="inline-block px-2.5 py-0.5 bg-blue-600/20 backdrop-blur-sm text-blue-300 text-[10px] font-semibold rounded-full uppercase tracking-[0.15em] mb-3">
+                  <div className="p-4 sm:p-6 lg:p-12 max-w-md">
+                    <span className="inline-block px-2 py-0.5 sm:px-2.5 bg-blue-600/20 backdrop-blur-sm text-blue-300 text-[9px] sm:text-[10px] font-semibold rounded-full uppercase tracking-[0.15em] mb-2 sm:mb-3">
                       {image.category}
                     </span>
-                    <p className="text-white text-base sm:text-lg lg:text-xl font-bold leading-snug mb-1.5">
+                    <p className="text-white text-[14px] sm:text-base lg:text-xl font-bold leading-snug mb-1 sm:mb-1.5">
                       {image.alt}
                     </p>
-                    <p className="text-gray-400 text-sm leading-[1.6]">{image.description}</p>
+                    <p className="text-gray-400 text-[12px] sm:text-sm leading-[1.6] line-clamp-3 sm:line-clamp-none">{image.description}</p>
                   </div>
                 </div>
               </button>
@@ -521,16 +523,16 @@ function GalleryContent() {
         )}
 
         {/* Stats */}
-        <div className="mt-14 sm:mt-20 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="mt-10 sm:mt-14 lg:mt-20 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
           {STATS.map((stat) => (
             <div
               key={stat.label}
-              className="bg-[#111113] border border-white/5 rounded-lg p-4 sm:p-5 text-center"
+              className="bg-[#111113] border border-white/5 rounded-lg p-3 sm:p-4 lg:p-5 text-center"
             >
-              <p className="text-blue-400 text-xl sm:text-2xl lg:text-3xl font-extrabold mb-0.5">
+              <p className="text-blue-400 text-lg sm:text-xl lg:text-3xl font-extrabold mb-0.5">
                 {stat.value}
               </p>
-              <p className="text-gray-500 text-[11px] sm:text-xs uppercase tracking-[0.15em] font-medium">
+              <p className="text-gray-500 text-[10px] sm:text-[11px] lg:text-xs uppercase tracking-[0.15em] font-medium">
                 {stat.label}
               </p>
             </div>
@@ -538,24 +540,24 @@ function GalleryContent() {
         </div>
 
         {/* CTA */}
-        <div className="mt-14 sm:mt-20 bg-[#111113] border border-white/5 rounded-lg p-6 sm:p-10 text-center">
-          <h3 className="text-xl sm:text-2xl font-extrabold text-white uppercase tracking-tight mb-3">
+        <div className="mt-10 sm:mt-14 lg:mt-20 bg-[#111113] border border-white/5 rounded-lg p-5 sm:p-8 lg:p-10 text-center">
+          <h3 className="text-lg sm:text-xl lg:text-2xl font-extrabold text-white uppercase tracking-tight mb-2 sm:mb-3">
             Interested in working with us?
           </h3>
-          <p className="text-gray-400 text-sm sm:text-base max-w-md mx-auto mb-6 leading-[1.6]">
+          <p className="text-gray-400 text-[13px] sm:text-sm lg:text-base max-w-md mx-auto mb-5 sm:mb-6 leading-[1.6]">
             Get in touch for a free on-site assessment and written quotation.
           </p>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
             <Link
               href="/#contact"
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-5 py-3 rounded-md transition-colors duration-200 text-sm min-h-[44px]"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-4 sm:px-5 py-2.5 sm:py-3 rounded-md transition-colors duration-200 text-[13px] sm:text-sm min-h-[44px]"
             >
               Get a free quote
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <a
               href="tel:0670318635"
-              className="inline-flex items-center gap-2 border border-white/15 hover:bg-white/8 active:bg-white/12 text-white font-semibold px-5 py-3 rounded-md transition-colors duration-200 text-sm min-h-[44px]"
+              className="inline-flex items-center gap-2 border border-white/15 hover:bg-white/8 active:bg-white/12 text-white font-semibold px-4 sm:px-5 py-2.5 sm:py-3 rounded-md transition-colors duration-200 text-[13px] sm:text-sm min-h-[44px]"
             >
               <Phone className="w-4 h-4" aria-hidden="true" />
               Call us
@@ -564,7 +566,7 @@ function GalleryContent() {
               href="https://wa.me/27670318635"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 border border-white/15 hover:bg-white/8 active:bg-white/12 text-white font-semibold px-5 py-3 rounded-md transition-colors duration-200 text-sm min-h-[44px]"
+              className="inline-flex items-center gap-2 border border-white/15 hover:bg-white/8 active:bg-white/12 text-white font-semibold px-4 sm:px-5 py-2.5 sm:py-3 rounded-md transition-colors duration-200 text-[13px] sm:text-sm min-h-[44px]"
             >
               <MessageCircle className="w-4 h-4" aria-hidden="true" />
               WhatsApp
@@ -596,10 +598,10 @@ function Footer() {
   }, [])
 
   return (
-    <footer className="bg-[#080809] border-t border-white/5 pt-14 pb-8" role="contentinfo">
+    <footer className="bg-[#080809] border-t border-white/5 pt-10 sm:pt-14 pb-8" role="contentinfo">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 mb-10">
-          <div className="sm:col-span-2 lg:col-span-1">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-6 mb-8 sm:mb-10">
+          <div className="col-span-2 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2.5 mb-3">
               <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center">
                 <span className="text-white font-bold text-base" aria-hidden="true">N</span>
@@ -609,7 +611,7 @@ function Footer() {
                 <div className="text-gray-600 text-[10px] tracking-[0.2em] uppercase">(Pty) Ltd</div>
               </div>
             </div>
-            <p className="text-gray-500 text-sm leading-[1.6] mb-2 max-w-xs">
+            <p className="text-gray-500 text-[13px] sm:text-sm leading-[1.6] mb-2 max-w-xs">
               Construction and maintenance services. Newcastle, KwaZulu-Natal — working nationwide across South Africa.
             </p>
             <p className="text-gray-600 text-xs">Reg: 2021/438875/07</p>

@@ -195,3 +195,50 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+
+/* ── Hide scrollbar utility (for horizontal scroll containers) ── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Touch-action optimizations for mobile ── */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger tap targets on touch devices */
+  a, button {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Prevent text selection on interactive elements */
+  [role="tab"],
+  [role="tablist"],
+  nav a {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* ── Prevent iOS zoom on input focus ── */
+@media screen and (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* ── Safe area padding for notched devices ── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  footer {
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  }
+  .mobile-nav-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

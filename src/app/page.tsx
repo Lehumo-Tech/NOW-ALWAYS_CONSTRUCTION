@@ -27,6 +27,8 @@ import {
   Shield,
   Clock,
   MapPin,
+  FileText,
+  ExternalLink,
 } from 'lucide-react'
 
 /* ─────────── DATA ─────────── */
@@ -79,9 +81,11 @@ const TRUSTED_CLIENTS = [
 const TESTIMONIALS = [
   {
     text: 'Now & Always handled the full plumbing and electrical retrofit of our Newcastle facility. Their team worked around our operating hours so we never had to close a ward. Professional, quiet, and always on schedule — exactly what a hospital environment demands.',
-    author: 'Facilities Manager',
+    author: 'Hospital General Manager',
+    authorName: 'Japie Greyling',
     company: 'Mediclinic',
     logo: '/logos/mediclinic.png',
+    referenceLetter: '/reference-letter-mediclinic.pdf',
   },
   {
     text: 'We needed a complete workshop refit — new drainage, electrical upgrades for diagnostic equipment, and a fresh coat throughout. Now & Always quoted fairly, showed up when they said they would, and handed over a spotless workshop two days ahead of schedule.',
@@ -268,28 +272,28 @@ function HeroSection() {
       />
       <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/40" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 sm:py-40">
-        <p className="text-blue-400 text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase mb-5">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-40">
+        <p className="text-blue-400 text-[11px] sm:text-xs lg:text-sm font-semibold tracking-[0.2em] sm:tracking-[0.25em] uppercase mb-4 sm:mb-5">
           Now and Always (Pty) Ltd
         </p>
-        <h1 className="text-[2rem] sm:text-5xl md:text-[3.4rem] lg:text-6xl font-extrabold text-white uppercase leading-[1.1] max-w-4xl tracking-tight">
+        <h1 className="text-[1.85rem] sm:text-5xl md:text-[3.4rem] lg:text-6xl font-extrabold text-white uppercase leading-[1.1] max-w-4xl tracking-tight">
           Construction &amp;<br className="hidden sm:block" /> Maintenance You Can Rely On
         </h1>
-        <p className="mt-6 text-gray-300 text-base sm:text-lg max-w-xl leading-[1.6]">
+        <p className="mt-5 sm:mt-6 text-gray-300 text-[15px] sm:text-lg max-w-xl leading-[1.6]">
           Building, renovations, plumbing, and electrical work across Newcastle and greater South Africa. Registered, insured, and on schedule.
         </p>
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-6 sm:mt-8 flex flex-wrap gap-2.5 sm:gap-3">
           <a
             href="#contact"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-6 py-3 rounded-md transition-colors duration-200 text-sm sm:text-base min-h-[44px]"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-5 sm:px-6 py-3 rounded-md transition-colors duration-200 text-[13px] sm:text-base min-h-[44px]"
           >
             Get a free quote
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </a>
           <a
             href="tel:0670318635"
-            className="inline-flex items-center gap-2 border border-white/20 hover:bg-white/8 active:bg-white/12 text-white font-semibold px-6 py-3 rounded-md transition-colors duration-200 text-sm sm:text-base min-h-[44px]"
+            className="inline-flex items-center gap-2 border border-white/20 hover:bg-white/8 active:bg-white/12 text-white font-semibold px-5 sm:px-6 py-3 rounded-md transition-colors duration-200 text-[13px] sm:text-base min-h-[44px]"
           >
             <Phone className="w-4 h-4" aria-hidden="true" />
             Call us
@@ -298,7 +302,7 @@ function HeroSection() {
             href="https://wa.me/27670318635"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 border border-white/20 hover:bg-white/8 active:bg-white/12 text-white font-semibold px-6 py-3 rounded-md transition-colors duration-200 text-sm sm:text-base min-h-[44px]"
+            className="inline-flex items-center gap-2 border border-white/20 hover:bg-white/8 active:bg-white/12 text-white font-semibold px-5 sm:px-6 py-3 rounded-md transition-colors duration-200 text-[13px] sm:text-base min-h-[44px]"
           >
             <MessageCircle className="w-4 h-4" aria-hidden="true" />
             WhatsApp
@@ -306,13 +310,13 @@ function HeroSection() {
         </div>
 
         {/* Trust marks */}
-        <div className="mt-12 flex flex-wrap gap-6 sm:gap-8">
+        <div className="mt-8 sm:mt-12 flex flex-wrap gap-4 sm:gap-6 lg:gap-8">
           {TRUST_MARKS.map((mark) => (
-            <div key={mark.label} className="flex items-center gap-2.5">
+            <div key={mark.label} className="flex items-center gap-2">
               <mark.icon className="w-4 h-4 text-blue-400/70" aria-hidden="true" />
               <div>
-                <p className="text-white text-sm font-medium leading-none">{mark.value}</p>
-                <p className="text-gray-500 text-[11px] mt-0.5">{mark.label}</p>
+                <p className="text-white text-[13px] sm:text-sm font-medium leading-none">{mark.value}</p>
+                <p className="text-gray-500 text-[10px] sm:text-[11px] mt-0.5">{mark.label}</p>
               </div>
             </div>
           ))}
@@ -324,9 +328,9 @@ function HeroSection() {
 
 function ServicesSection() {
   return (
-    <section id="services" className="bg-[#0a0a0b] py-20 sm:py-28" aria-label="Services">
+    <section id="services" className="bg-[#0a0a0b] py-14 sm:py-20 lg:py-28" aria-label="Services">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12 sm:mb-14">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 mb-10 sm:mb-14">
           <div className="max-w-lg">
             <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2">
               What we do
@@ -337,7 +341,7 @@ function ServicesSection() {
           </div>
           <Link
             href="/gallery"
-            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-semibold text-sm transition-colors duration-200"
+            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-semibold text-[13px] sm:text-sm transition-colors duration-200"
           >
             View past projects
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -350,20 +354,20 @@ function ServicesSection() {
             <a
               key={service.title}
               href="#contact"
-              className={`group bg-[#111113] hover:bg-[#161618] border border-white/5 hover:border-blue-500/20 rounded-lg p-5 sm:p-6 transition-all duration-200 flex flex-col ${
-                i === 0 ? 'sm:col-span-2 sm:row-span-2 sm:p-8' : ''
+              className={`group bg-[#111113] hover:bg-[#161618] border border-white/5 hover:border-blue-500/20 rounded-lg p-4 sm:p-5 lg:p-6 transition-all duration-200 flex flex-col ${
+                i === 0 ? 'sm:col-span-2 sm:row-span-2 sm:p-6 lg:p-8' : ''
               }`}
             >
-              <div className={`${i === 0 ? 'w-14 h-14 sm:w-16 sm:h-16' : 'w-11 h-11 sm:w-12 sm:h-12'} bg-blue-600/8 group-hover:bg-blue-600/15 rounded-lg flex items-center justify-center mb-4 transition-colors duration-200`}>
-                <service.icon className={`${i === 0 ? 'w-7 h-7 sm:w-8 sm:h-8' : 'w-5 h-5 sm:w-6 sm:h-6'} text-blue-400`} aria-hidden="true" />
+              <div className={`${i === 0 ? 'w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16' : 'w-10 h-10 sm:w-11 sm:h-11 lg:w-12 lg:h-12'} bg-blue-600/8 group-hover:bg-blue-600/15 rounded-lg flex items-center justify-center mb-3 sm:mb-4 transition-colors duration-200`}>
+                <service.icon className={`${i === 0 ? 'w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8' : 'w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6'} text-blue-400`} aria-hidden="true" />
               </div>
-              <h3 className="text-white font-bold text-base sm:text-lg uppercase tracking-wide mb-2">
+              <h3 className="text-white font-bold text-[15px] sm:text-base lg:text-lg uppercase tracking-wide mb-1.5 sm:mb-2">
                 {service.title}
               </h3>
-              <p className="text-gray-400 text-sm leading-[1.6] mb-3 flex-1">
+              <p className="text-gray-400 text-[13px] sm:text-sm leading-[1.6] mb-2 sm:mb-3 flex-1">
                 {service.description}
               </p>
-              <span className="text-gray-600 text-[11px] uppercase tracking-wider font-medium">
+              <span className="text-gray-600 text-[10px] sm:text-[11px] uppercase tracking-wider font-medium">
                 {service.detail}
               </span>
             </a>
@@ -386,30 +390,29 @@ function FeaturedProjectsSection() {
   }
 
   return (
-    <section id="projects" className="bg-[#0a0a0b] py-20 sm:py-28 border-t border-white/5" aria-label="Featured projects">
+    <section id="projects" className="bg-[#0a0a0b] py-14 sm:py-20 lg:py-28 border-t border-white/5" aria-label="Featured projects">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 sm:mb-14">
+        <div className="mb-10 sm:mb-14">
           <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2">
             Recent work
           </p>
           <h2 className="text-[1.75rem] sm:text-4xl lg:text-[2.75rem] font-extrabold text-white uppercase leading-[1.1] tracking-tight">
             Featured projects
           </h2>
-          <p className="mt-3 text-gray-400 text-base max-w-lg leading-[1.6]">
+          <p className="mt-2 sm:mt-3 text-gray-400 text-[14px] sm:text-base max-w-lg leading-[1.6]">
             A selection from our portfolio. View the full gallery for all completed projects.
           </p>
         </div>
 
         {/* Bento-style featured grid: hero image + smaller cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-[200px] sm:auto-rows-[220px]">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 auto-rows-[140px] sm:auto-rows-[200px] lg:auto-rows-[220px]">
           {FEATURED_IMAGES.map((image, i) => {
             const Icon = categoryIcon(image.category)
             const isLarge = i === 0
             return (
               <div
                 key={image.src}
-                className={`group relative overflow-hidden rounded-lg cursor-pointer ${isLarge ? 'sm:row-span-2' : ''}`}
-                style={isLarge ? {} : {}}
+                className={`group relative overflow-hidden rounded-lg cursor-pointer ${isLarge ? 'col-span-2 sm:col-span-2 lg:col-span-1 row-span-2' : ''}`}
               >
                 <img
                   src={image.src}
@@ -419,14 +422,14 @@ function FeaturedProjectsSection() {
                   width={isLarge ? 800 : 400}
                   height={isLarge ? 600 : 300}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-4 sm:p-5">
-                  <div className="flex items-center gap-1.5 mb-1.5">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-3 sm:p-4 lg:p-5">
+                  <div className="flex items-center gap-1 mb-1">
                     <Icon className="w-3 h-3 text-blue-400" aria-hidden="true" />
-                    <span className="text-blue-300 text-[10px] font-semibold uppercase tracking-[0.15em]">
+                    <span className="text-blue-300 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.15em]">
                       {image.category}
                     </span>
                   </div>
-                  <p className="text-white text-sm font-medium leading-snug">
+                  <p className="text-white text-[11px] sm:text-sm font-medium leading-snug line-clamp-2">
                     {image.alt}
                   </p>
                 </div>
@@ -435,10 +438,10 @@ function FeaturedProjectsSection() {
           })}
         </div>
 
-        <div className="mt-10 sm:mt-12 text-center">
+        <div className="mt-8 sm:mt-10 lg:mt-12 text-center">
           <Link
             href="/gallery"
-            className="group inline-flex items-center gap-2.5 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-7 py-3.5 rounded-md transition-colors duration-200 text-sm min-h-[44px]"
+            className="group inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-6 sm:px-7 py-3 sm:py-3.5 rounded-md transition-colors duration-200 text-[13px] sm:text-sm min-h-[44px]"
           >
             <Eye className="w-4 h-4" aria-hidden="true" />
             View full gallery
@@ -452,40 +455,42 @@ function FeaturedProjectsSection() {
 
 function TrustedBySection() {
   return (
-    <section className="bg-[#0a0a0b] py-16 sm:py-20 border-t border-white/5" aria-label="Trusted by">
+    <section className="bg-[#0a0a0b] py-12 sm:py-16 lg:py-20 border-t border-white/5" aria-label="Trusted by">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10 sm:mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2">
             Trusted by leading organisations
           </p>
           <h2 className="text-[1.75rem] sm:text-4xl lg:text-[2.75rem] font-extrabold text-white uppercase leading-[1.1] tracking-tight">
             Companies that trust us
           </h2>
-          <p className="mt-3 text-gray-400 text-base max-w-lg mx-auto leading-[1.6]">
+          <p className="mt-3 text-gray-400 text-[14px] sm:text-base max-w-lg mx-auto leading-[1.6]">
             From healthcare to education, automotive to insurance — our clients come back because we deliver on our word.
           </p>
         </div>
 
-        {/* Logo marquee grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4 sm:gap-6 items-center">
-          {TRUSTED_CLIENTS.map((client) => (
-            <div
-              key={client.name}
-              className="group flex flex-col items-center justify-center bg-[#111113] border border-white/5 hover:border-blue-500/20 rounded-lg p-4 sm:p-5 transition-all duration-200 aspect-square sm:aspect-auto sm:h-28"
-            >
-              <img
-                src={client.logo}
-                alt={`${client.name} logo`}
-                className="max-h-10 sm:max-h-12 w-auto object-contain opacity-60 group-hover:opacity-90 transition-opacity duration-200"
-                loading="lazy"
-                width={120}
-                height={48}
-              />
-              <span className="text-gray-500 text-[10px] sm:text-[11px] font-medium mt-2 tracking-wide uppercase text-center group-hover:text-gray-300 transition-colors duration-200">
-                {client.name}
-              </span>
-            </div>
-          ))}
+        {/* Mobile: horizontal scroll; Desktop: grid */}
+        <div className="-mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide">
+          <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-7 gap-3 sm:gap-4 lg:gap-6 items-center min-w-[320px]">
+            {TRUSTED_CLIENTS.map((client) => (
+              <div
+                key={client.name}
+                className="group flex flex-col items-center justify-center bg-[#111113] border border-white/5 hover:border-blue-500/20 rounded-lg p-3 sm:p-4 lg:p-5 transition-all duration-200 aspect-square sm:aspect-auto sm:h-28"
+              >
+                <img
+                  src={client.logo}
+                  alt={`${client.name} logo`}
+                  className="max-h-8 sm:max-h-10 lg:max-h-12 w-auto object-contain opacity-60 group-hover:opacity-90 transition-opacity duration-200"
+                  loading="lazy"
+                  width={120}
+                  height={48}
+                />
+                <span className="text-gray-500 text-[9px] sm:text-[10px] lg:text-[11px] font-medium mt-1.5 sm:mt-2 tracking-wide uppercase text-center group-hover:text-gray-300 transition-colors duration-200 leading-tight">
+                  {client.name}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -494,14 +499,17 @@ function TrustedBySection() {
 
 function TestimonialsSection() {
   const [current, setCurrent] = useState(0)
+  const [showRefLetter, setShowRefLetter] = useState(false)
 
-  const prev = () => setCurrent((c) => (c === 0 ? TESTIMONIALS.length - 1 : c - 1))
-  const next = () => setCurrent((c) => (c === TESTIMONIALS.length - 1 ? 0 : c + 1))
+  const prev = () => { setCurrent((c) => (c === 0 ? TESTIMONIALS.length - 1 : c - 1)); setShowRefLetter(false) }
+  const next = () => { setCurrent((c) => (c === TESTIMONIALS.length - 1 ? 0 : c + 1)); setShowRefLetter(false) }
+
+  const activeTestimonial = TESTIMONIALS[current]
 
   return (
-    <section id="about" className="bg-[#0a0a0b] py-20 sm:py-28 border-t border-white/5" aria-label="Client testimonials">
+    <section id="about" className="bg-[#0a0a0b] py-16 sm:py-20 lg:py-28 border-t border-white/5" aria-label="Client testimonials">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10 sm:mb-14">
+        <div className="text-center mb-8 sm:mb-14">
           <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2">
             Client feedback
           </p>
@@ -511,63 +519,126 @@ function TestimonialsSection() {
         </div>
 
         <div className="relative max-w-3xl mx-auto">
-          <div className="bg-[#111113] border border-white/5 rounded-lg p-6 sm:p-10">
+          <div className="bg-[#111113] border border-white/5 rounded-lg p-5 sm:p-8 lg:p-10">
             {/* Company logo + quote */}
-            <div className="flex items-start gap-4 mb-5">
+            <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-5">
               <img
-                src={TESTIMONIALS[current].logo}
-                alt={`${TESTIMONIALS[current].company} logo`}
-                className="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-lg bg-white/5 p-1.5 shrink-0"
+                src={activeTestimonial.logo}
+                alt={`${activeTestimonial.company} logo`}
+                className="w-10 h-10 sm:w-14 sm:h-14 object-contain rounded-lg bg-white/5 p-1 sm:p-1.5 shrink-0"
                 loading="lazy"
                 width={56}
                 height={56}
               />
               <div className="min-w-0">
-                <p className="text-white font-bold text-sm sm:text-base">{TESTIMONIALS[current].company}</p>
-                <p className="text-blue-400 text-xs sm:text-sm font-medium">{TESTIMONIALS[current].author}</p>
+                <p className="text-white font-bold text-sm sm:text-base">{activeTestimonial.company}</p>
+                <p className="text-blue-400 text-xs sm:text-sm font-medium">
+                  {activeTestimonial.authorName ? `${activeTestimonial.authorName}, ` : ''}{activeTestimonial.author}
+                </p>
               </div>
               <Quote className="w-8 h-8 text-blue-400/15 ml-auto shrink-0 hidden sm:block" aria-hidden="true" />
             </div>
 
-            <blockquote className="text-white text-base sm:text-lg leading-[1.7] min-h-[100px] sm:min-h-[80px]">
-              &ldquo;{TESTIMONIALS[current].text}&rdquo;
+            <blockquote className="text-white text-[15px] sm:text-lg leading-[1.7]">
+              &ldquo;{activeTestimonial.text}&rdquo;
             </blockquote>
+
+            {/* Reference Letter for Mediclinic */}
+            {activeTestimonial.referenceLetter && (
+              <div className="mt-4 sm:mt-5">
+                <button
+                  onClick={() => setShowRefLetter(!showRefLetter)}
+                  className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 text-xs sm:text-sm font-semibold transition-colors duration-200 min-h-[44px]"
+                >
+                  <FileText className="w-4 h-4" aria-hidden="true" />
+                  {showRefLetter ? 'Hide reference letter' : 'View reference letter'}
+                  <ChevronRight className={`w-3.5 h-3.5 transition-transform duration-200 ${showRefLetter ? 'rotate-90' : ''}`} aria-hidden="true" />
+                </button>
+
+                {showRefLetter && (
+                  <div className="mt-3 sm:mt-4 bg-[#0d0d0e] border border-white/8 rounded-lg p-4 sm:p-6 text-sm leading-[1.7] text-gray-300">
+                    <div className="flex items-center gap-2 mb-3 pb-3 border-b border-white/5">
+                      <div className="w-7 h-7 bg-green-600/15 rounded flex items-center justify-center shrink-0">
+                        <FileText className="w-3.5 h-3.5 text-green-400" aria-hidden="true" />
+                      </div>
+                      <div>
+                        <p className="text-white font-bold text-xs">Official Reference Letter</p>
+                        <p className="text-gray-500 text-[10px]">Mediclinic Newcastle — 22 May 2026</p>
+                      </div>
+                      <a
+                        href={activeTestimonial.referenceLetter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-auto inline-flex items-center gap-1.5 text-blue-400 hover:text-blue-300 text-[11px] font-semibold bg-blue-600/10 hover:bg-blue-600/15 px-3 py-1.5 rounded-md transition-colors duration-200 min-h-[44px]"
+                      >
+                        <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                        Open PDF
+                      </a>
+                    </div>
+                    <p className="mb-3">To Whom It May Concern:</p>
+                    <p className="mb-3">
+                      It is my pleasure to provide a positive reference for Now and Always Construction, a building contracting company that has undertaken work at Mediclinic Newcastle.
+                    </p>
+                    <p className="mb-3">
+                      During his engagement with our hospital, Now and Always Construction demonstrated a professional, reliable and solution-focused approach. The work was carried out with due regard for the standards expected within a healthcare environment, where safety, quality, neatness, communication and minimal disruption to hospital operations are essential.
+                    </p>
+                    <p className="mb-3">
+                      Now and Always Construction employees were approachable, responsive and willing to engage constructively throughout the project. They showed a clear understanding of the importance of working within an operational hospital setting and displayed commitment to completing the required work in a responsible and professional manner.
+                    </p>
+                    <p className="mb-3">
+                      We found Now and Always Construction to be dependable and committed to delivering a good standard of workmanship. Their conduct reflected integrity, accountability and pride in their work, and we appreciate the contribution made by Now and Always Construction at Mediclinic Newcastle.
+                    </p>
+                    <p className="mb-3">
+                      Based on our experience, I am pleased to recommend Now and Always Construction for building and contracting work.
+                    </p>
+                    <div className="mt-4 pt-3 border-t border-white/5">
+                      <p className="text-white font-bold text-sm">Japie Greyling</p>
+                      <p className="text-gray-400 text-xs">Hospital General Manager</p>
+                      <p className="text-gray-500 text-[11px]">Mediclinic Newcastle</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           <button
             onClick={prev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 sm:-translate-x-12 w-10 h-10 sm:w-11 sm:h-11 bg-[#111113] hover:bg-blue-600/15 border border-white/8 rounded-full flex items-center justify-center transition-colors duration-200 min-w-[44px] min-h-[44px]"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-12 w-10 h-10 sm:w-11 sm:h-11 bg-[#111113] hover:bg-blue-600/15 border border-white/8 rounded-full flex items-center justify-center transition-colors duration-200 min-w-[44px] min-h-[44px]"
             aria-label="Previous testimonial"
           >
             <ChevronLeft className="w-5 h-5 text-white" />
           </button>
           <button
             onClick={next}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 sm:translate-x-12 w-10 h-10 sm:w-11 sm:h-11 bg-[#111113] hover:bg-blue-600/15 border border-white/8 rounded-full flex items-center justify-center transition-colors duration-200 min-w-[44px] min-h-[44px]"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-12 w-10 h-10 sm:w-11 sm:h-11 bg-[#111113] hover:bg-blue-600/15 border border-white/8 rounded-full flex items-center justify-center transition-colors duration-200 min-w-[44px] min-h-[44px]"
             aria-label="Next testimonial"
           >
             <ChevronRight className="w-5 h-5 text-white" />
           </button>
 
-          <div className="flex justify-center gap-1.5 mt-7 flex-wrap" role="tablist" aria-label="Testimonial navigation">
-            {TESTIMONIALS.map((t, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrent(i)}
-                className={`transition-all duration-200 min-w-[44px] min-h-[28px] flex items-center justify-center rounded-full px-2.5 py-1 ${
-                  i === current
-                    ? 'bg-blue-600/15 text-blue-400'
-                    : 'text-gray-600 hover:text-gray-400'
-                }`}
-                role="tab"
-                aria-selected={i === current}
-                aria-label={`${t.company} testimonial`}
-              >
-                <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide whitespace-nowrap">
-                  {t.company}
-                </span>
-              </button>
-            ))}
+          {/* Mobile: scrollable horizontal pills; Desktop: all visible */}
+          <div className="mt-6 sm:mt-7 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto sm:overflow-visible scrollbar-hide" role="tablist" aria-label="Testimonial navigation">
+            <div className="flex gap-1 sm:gap-1.5 sm:flex-wrap sm:justify-center min-w-max sm:min-w-0">
+              {TESTIMONIALS.map((t, i) => (
+                <button
+                  key={i}
+                  onClick={() => { setCurrent(i); setShowRefLetter(false) }}
+                  className={`transition-all duration-200 min-h-[36px] sm:min-h-[28px] flex items-center justify-center rounded-full px-3 sm:px-2.5 py-1.5 sm:py-1 ${
+                    i === current
+                      ? 'bg-blue-600/15 text-blue-400'
+                      : 'text-gray-600 hover:text-gray-400'
+                  }`}
+                  role="tab"
+                  aria-selected={i === current}
+                  aria-label={`${t.company} testimonial`}
+                >
+                  <span className="text-[11px] sm:text-[10px] lg:text-[11px] font-semibold uppercase tracking-wide whitespace-nowrap">
+                    {t.company}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -577,27 +648,27 @@ function TestimonialsSection() {
 
 function CTASection() {
   return (
-    <section className="relative py-20 sm:py-28 overflow-hidden" aria-label="Call to action">
+    <section className="relative py-14 sm:py-20 lg:py-28 overflow-hidden" aria-label="Call to action">
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0b] via-blue-950/15 to-[#0a0a0b]" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-[1.75rem] sm:text-4xl lg:text-[2.75rem] font-extrabold text-white uppercase leading-[1.1] tracking-tight mb-4">
+        <h2 className="text-[1.75rem] sm:text-4xl lg:text-[2.75rem] font-extrabold text-white uppercase leading-[1.1] tracking-tight mb-3 sm:mb-4">
           Ready to start?
         </h2>
-        <p className="text-gray-300 text-base sm:text-lg max-w-lg mx-auto mb-8 leading-[1.6]">
+        <p className="text-gray-300 text-[14px] sm:text-base lg:text-lg max-w-lg mx-auto mb-6 sm:mb-8 leading-[1.6]">
           Call us for a free on-site assessment and written quotation. No obligation.
         </p>
-        <div className="flex flex-wrap justify-center gap-3">
+        <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3">
           <a
             href="#contact"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-7 py-3.5 rounded-md transition-colors duration-200 text-sm sm:text-base min-h-[44px]"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-5 sm:px-7 py-3 sm:py-3.5 rounded-md transition-colors duration-200 text-[13px] sm:text-base min-h-[44px]"
           >
             Get a free quote
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </a>
           <a
             href="tel:0670318635"
-            className="inline-flex items-center gap-2 bg-white/8 hover:bg-white/12 active:bg-white/16 text-white font-semibold px-7 py-3.5 rounded-md transition-colors duration-200 text-sm sm:text-base min-h-[44px]"
+            className="inline-flex items-center gap-2 bg-white/8 hover:bg-white/12 active:bg-white/16 text-white font-semibold px-5 sm:px-7 py-3 sm:py-3.5 rounded-md transition-colors duration-200 text-[13px] sm:text-base min-h-[44px]"
           >
             <Phone className="w-4 h-4" aria-hidden="true" />
             067 031 8635
@@ -616,10 +687,10 @@ function Footer() {
   }, [])
 
   return (
-    <footer id="contact" className="bg-[#080809] border-t border-white/5 pt-14 pb-8" role="contentinfo">
+    <footer id="contact" className="bg-[#080809] border-t border-white/5 pt-10 sm:pt-14 pb-8" role="contentinfo">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 mb-10">
-          <div className="sm:col-span-2 lg:col-span-1">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-6 mb-8 sm:mb-10">
+          <div className="col-span-2 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2.5 mb-3">
               <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center">
                 <span className="text-white font-bold text-base" aria-hidden="true">N</span>
@@ -629,7 +700,7 @@ function Footer() {
                 <div className="text-gray-600 text-[10px] tracking-[0.2em] uppercase">(Pty) Ltd</div>
               </div>
             </div>
-            <p className="text-gray-500 text-sm leading-[1.6] mb-2 max-w-xs">
+            <p className="text-gray-500 text-[13px] sm:text-sm leading-[1.6] mb-2 max-w-xs">
               Construction and maintenance services. Newcastle, KwaZulu-Natal — working nationwide across South Africa.
             </p>
             <p className="text-gray-600 text-xs">Reg: 2021/438875/07</p>
