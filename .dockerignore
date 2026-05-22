@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+*.md
+.env*.local
+dev.log
+.zscripts
+k8s
+mini-services
+prisma
+upload

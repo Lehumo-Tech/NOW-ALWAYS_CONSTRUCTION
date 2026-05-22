@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: now-and-always-web
+  namespace: now-and-always
+  labels:
+    app: now-and-always
+    component: web
+spec:
+  type: ClusterIP
+  selector:
+    app: now-and-always
+    component: web
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP

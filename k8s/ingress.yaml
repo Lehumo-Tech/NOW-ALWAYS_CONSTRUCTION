@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: now-and-always-ingress
+  namespace: now-and-always
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - nowandalways.co.za
+        - www.nowandalways.co.za
+      secretName: now-and-always-tls
+  rules:
+    - host: nowandalways.co.za
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: now-and-always-web
+                port:
+                  number: 80
+    - host: www.nowandalways.co.za
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: now-and-always-web
+                port:
+                  number: 80

@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: now-and-always-config
+  namespace: now-and-always
+data:
+  NODE_ENV: production
+  PORT: "3000"
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: now-and-always-netpol
+  namespace: now-and-always
+spec:
+  podSelector:
+    matchLabels:
+      app: now-and-always
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - port: 3000
+          protocol: TCP
+  egress:
+    - to: []
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        - port: 443
+          protocol: TCP

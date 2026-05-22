@@ -21,76 +21,78 @@ import {
   Droplets,
   Zap,
   HardHat,
-  ArrowLeft,
   Grid3X3,
   LayoutGrid,
   Images,
+  Shield,
+  Clock,
+  MapPin,
 } from 'lucide-react'
 
 /* ─────────── DATA ─────────── */
 
 const NAV_LINKS = [
-  { label: 'HOME', href: '/' },
-  { label: 'ABOUT', href: '/#about' },
-  { label: 'SERVICES', href: '/#services' },
-  { label: 'GALLERY', href: '/gallery' },
-  { label: 'CONTACT', href: '/#contact' },
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/#about' },
+  { label: 'Services', href: '/#services' },
+  { label: 'Gallery', href: '/gallery' },
+  { label: 'Contact', href: '/#contact' },
 ]
 
 const GALLERY_IMAGES = [
   {
     src: '/gallery/WhatsApp Image 2026-05-22 at 09.26.21.jpeg',
-    alt: 'Construction site foundation work in progress',
+    alt: 'Foundation and trench work for a residential development in Newcastle',
     category: 'Building',
-    description: 'Foundation and structural work for a new residential development in Newcastle. Our team ensured precise engineering and quality materials throughout.',
+    description: 'Foundation and structural work for a new residential development. Precise engineering and quality materials throughout the build process.',
   },
   {
     src: '/gallery/WhatsApp Image 2026-05-22 at 09.26.24.jpeg',
-    alt: 'Completed renovation project showcase',
+    alt: 'Completed bathroom renovation with new fixtures and tiling',
     category: 'Renovations',
-    description: 'Complete interior renovation transforming an outdated space into a modern living environment with premium finishes.',
+    description: 'Full bathroom renovation including plumbing reroute, waterproofing, tiling, and fixture installation. Completed in 10 working days.',
   },
   {
     src: '/gallery/WhatsApp Image 2026-05-22 at 09.26.26.jpeg',
-    alt: 'Professional plumbing installation',
+    alt: 'Commercial plumbing installation with SABS-standard piping',
     category: 'Plumbing',
-    description: 'Full plumbing installation for a commercial property, including water supply lines and drainage systems built to SABS standards.',
+    description: 'Full plumbing installation for a commercial property — water supply lines, drainage, and sanitary ware built to SABS standards.',
   },
   {
     src: '/gallery/WhatsApp Image 2026-05-22 at 09.26.28.jpeg',
-    alt: 'Electrical wiring and installation work',
+    alt: 'Distribution board and wiring for a multi-unit residential block',
     category: 'Electrical',
-    description: 'Certified electrical installation with compliant wiring, distribution boards, and safety switches for a multi-unit development.',
+    description: 'Certified electrical installation with compliant wiring, distribution boards, and safety switches for a 12-unit residential block.',
   },
   {
     src: '/gallery/WhatsApp Image 2026-05-22 at 09.26.29.jpeg',
-    alt: 'Building construction progress',
+    alt: 'Wall construction and brickwork on a new-build project',
     category: 'Building',
-    description: 'Progress on a new-build project showing wall construction and structural integrity at every stage.',
+    description: 'Wall construction and brickwork on a new-build. All work inspected at each stage for structural integrity.',
   },
   {
     src: '/gallery/WhatsApp Image 2026-05-22 at 09.26.31.jpeg',
-    alt: 'Renovation detailing and finishing',
+    alt: 'Interior finishing — tiling and trim detail on a renovation',
     category: 'Renovations',
-    description: 'Attention to detail in finishing work — tiling, trim, and surface preparation delivering a flawless result.',
+    description: 'Finishing work including tiling, skirting, and surface preparation. Every detail checked before handover.',
   },
   {
     src: '/gallery/WhatsApp Image 2026-05-22 at 09.26.32.jpeg',
-    alt: 'Commercial construction project',
+    alt: 'Steel framework erection for a commercial structure',
     category: 'Building',
-    description: 'Large-scale commercial build demonstrating our capacity to handle complex projects on schedule and within budget.',
+    description: 'Commercial-scale steel framework for a retail structure. On schedule and within the agreed budget.',
   },
   {
     src: '/gallery/WhatsApp Image 2026-05-22 at 09.26.35.jpeg',
-    alt: 'Interior renovation and remodeling',
+    alt: 'Full interior remodel from design consultation to handover',
     category: 'Renovations',
-    description: 'Full interior remodel from design consultation to final walkthrough — revitalizing spaces with expert craftsmanship.',
+    description: 'Interior remodel covering design consultation, demolition, reconstruction, and final walkthrough with the client.',
   },
   {
     src: '/gallery/WhatsApp Image 2026-05-22 at 09.26.44.jpeg',
-    alt: 'Site preparation and groundwork',
+    alt: 'Site clearance and earthworks before foundation pouring',
     category: 'Building',
-    description: 'Professional site preparation including excavation, grading, and foundation laying for a new construction project.',
+    description: 'Site preparation including excavation, grading, and compaction before foundation work begins.',
   },
 ]
 
@@ -98,32 +100,39 @@ const GALLERY_CATEGORIES = ['All', 'Building', 'Renovations', 'Plumbing', 'Elect
 
 type GridLayout = 'masonry' | 'grid' | 'fullwidth'
 
-/* ─────────── COMPONENTS ─────────── */
+const STATS = [
+  { value: '50+', label: 'Projects completed' },
+  { value: '2021', label: 'Founded' },
+  { value: '100%', label: 'Certs & compliance' },
+  { value: ' Nationwide', label: 'Coverage' },
+]
+
+/* ─────────── HEADER ─────────── */
 
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          <a href="/" className="flex items-center gap-3 shrink-0">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-blue-600 rounded flex items-center justify-center">
-              <span className="text-white font-bold text-lg sm:text-xl">N</span>
+          <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="Now & Always Construction — Home">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-md flex items-center justify-center">
+              <span className="text-white font-bold text-base sm:text-xl" aria-hidden="true">N</span>
             </div>
-            <div className="leading-tight">
+            <div className="leading-none">
               <div className="text-white font-bold text-sm sm:text-base tracking-wide">NOW &amp; ALWAYS</div>
-              <div className="text-gray-400 text-[10px] sm:text-xs tracking-widest">CONSTRUCTION</div>
+              <div className="text-gray-500 text-[9px] sm:text-[10px] tracking-[0.2em] uppercase">Construction</div>
             </div>
-          </a>
+          </Link>
 
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
-            {NAV_LINKS.map((link, i) => (
+          <nav className="hidden lg:flex items-center gap-7 xl:gap-9" aria-label="Primary navigation">
+            {NAV_LINKS.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className={`text-sm tracking-wide font-medium transition-colors ${
-                  link.label === 'GALLERY' ? 'text-blue-400' : i === 0 ? 'text-gray-300 hover:text-white' : 'text-gray-300 hover:text-white'
+                className={`text-[13px] tracking-wide font-medium transition-colors duration-200 ${
+                  link.label === 'Gallery' ? 'text-blue-400' : 'text-gray-400 hover:text-white'
                 }`}
               >
                 {link.label}
@@ -131,18 +140,19 @@ function Header() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <a
               href="tel:0670318635"
-              className="hidden sm:inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 rounded transition-colors"
+              className="hidden sm:inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white text-[13px] font-semibold px-4 py-2.5 rounded-md transition-colors duration-200 min-h-[44px]"
             >
-              <Phone className="w-4 h-4" />
-              CALL NOW
+              <Phone className="w-4 h-4" aria-hidden="true" />
+              067 031 8635
             </a>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden text-white p-2"
-              aria-label="Toggle menu"
+              className="lg:hidden text-white p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileOpen}
             >
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -151,15 +161,15 @@ function Header() {
       </div>
 
       {mobileOpen && (
-        <div className="lg:hidden bg-black/95 border-t border-white/10">
-          <nav className="flex flex-col px-6 py-4 gap-4">
+        <div className="lg:hidden bg-black/95 border-t border-white/8" role="dialog" aria-label="Mobile navigation">
+          <nav className="flex flex-col px-6 py-5 gap-4" aria-label="Mobile navigation">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className={`text-sm tracking-wide font-medium ${
-                  link.label === 'GALLERY' ? 'text-blue-400' : 'text-gray-300'
+                className={`text-[15px] tracking-wide font-medium ${
+                  link.label === 'Gallery' ? 'text-blue-400' : 'text-gray-300'
                 }`}
               >
                 {link.label}
@@ -167,10 +177,10 @@ function Header() {
             ))}
             <a
               href="tel:0670318635"
-              className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded mt-2"
+              className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white text-[14px] font-semibold px-5 py-3 rounded-md mt-1 min-h-[44px]"
             >
-              <Phone className="w-4 h-4" />
-              CALL NOW
+              <Phone className="w-4 h-4" aria-hidden="true" />
+              067 031 8635
             </a>
           </nav>
         </div>
@@ -212,10 +222,13 @@ function Lightbox({
     <div
       className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Image lightbox"
     >
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors z-10"
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 bg-white/8 hover:bg-white/16 active:bg-white/20 rounded-full flex items-center justify-center transition-colors duration-200 z-10 min-w-[44px] min-h-[44px]"
         aria-label="Close lightbox"
       >
         <XIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
@@ -223,7 +236,7 @@ function Lightbox({
 
       <button
         onClick={(e) => { e.stopPropagation(); onPrev() }}
-        className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-14 sm:h-14 bg-white/10 hover:bg-blue-600/30 rounded-full flex items-center justify-center transition-colors z-10"
+        className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-14 sm:h-14 bg-white/8 hover:bg-blue-600/20 rounded-full flex items-center justify-center transition-colors duration-200 z-10 min-w-[44px] min-h-[44px]"
         aria-label="Previous image"
       >
         <ChevronLeft className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
@@ -242,65 +255,62 @@ function Lightbox({
 
       <button
         onClick={(e) => { e.stopPropagation(); onNext() }}
-        className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-14 sm:h-14 bg-white/10 hover:bg-blue-600/30 rounded-full flex items-center justify-center transition-colors z-10"
+        className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-14 sm:h-14 bg-white/8 hover:bg-blue-600/20 rounded-full flex items-center justify-center transition-colors duration-200 z-10 min-w-[44px] min-h-[44px]"
         aria-label="Next image"
       >
         <ChevronRight className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
       </button>
 
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent pt-20 pb-6 px-6">
-        <div className="max-w-4xl mx-auto">
-          <span className="inline-block px-3 py-1 bg-blue-600/20 text-blue-400 text-xs font-semibold rounded-full uppercase tracking-wider mb-3">
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent pt-16 pb-6 px-6">
+        <div className="max-w-3xl mx-auto">
+          <span className="inline-block px-2.5 py-0.5 bg-blue-600/15 text-blue-400 text-[11px] font-semibold rounded-full uppercase tracking-[0.15em] mb-2.5">
             {images[currentIndex].category}
           </span>
-          <p className="text-white text-base sm:text-lg font-medium mb-2">{images[currentIndex].alt}</p>
-          <p className="text-gray-400 text-sm leading-relaxed max-w-2xl">{images[currentIndex].description}</p>
-          <div className="flex items-center justify-between mt-4">
-            <span className="text-gray-500 text-sm">
-              {currentIndex + 1} / {images.length}
-            </span>
-          </div>
+          <p className="text-white text-sm sm:text-base font-medium mb-1.5">{images[currentIndex].alt}</p>
+          <p className="text-gray-400 text-sm leading-[1.6] max-w-xl">{images[currentIndex].description}</p>
+          <p className="text-gray-600 text-xs mt-3">
+            {currentIndex + 1} / {images.length}
+          </p>
         </div>
       </div>
     </div>
   )
 }
 
-/* ─────────── GALLERY PAGE BANNER ─────────── */
+/* ─────────── GALLERY BANNER ─────────── */
 
 function GalleryBanner() {
   return (
-    <section className="relative pt-20 sm:pt-24 pb-16 sm:pb-20 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-blue-950/30 via-[#0a0a0b] to-[#0a0a0b]" />
-      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
+    <section className="relative pt-20 sm:pt-24 pb-14 sm:pb-18 overflow-hidden" aria-label="Gallery page header">
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-950/20 via-[#0a0a0b] to-[#0a0a0b]" />
+      <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M20 20h1v1h-1z\'/%3E%3C/g%3E%3C/svg%3E")' }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm mb-8">
-          <Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link>
-          <ChevronRight className="w-4 h-4 text-gray-600" />
-          <span className="text-blue-400 font-medium">Gallery</span>
+        <nav className="flex items-center gap-2 text-sm mb-7" aria-label="Breadcrumb">
+          <Link href="/" className="text-gray-500 hover:text-white transition-colors duration-200">Home</Link>
+          <ChevronRight className="w-3.5 h-3.5 text-gray-700" aria-hidden="true" />
+          <span className="text-blue-400 font-medium" aria-current="page">Gallery</span>
         </nav>
 
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
           <div>
-            <p className="text-blue-400 text-xs sm:text-sm font-semibold tracking-widest uppercase mb-3">
-              OUR PORTFOLIO
+            <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2.5">
+              Our portfolio
             </p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white uppercase leading-tight">
-              PROJECT<br className="hidden sm:block" /> GALLERY
+            <h1 className="text-[2rem] sm:text-5xl lg:text-[3.5rem] font-extrabold text-white uppercase leading-[1.05] tracking-tight">
+              Project gallery
             </h1>
-            <p className="mt-4 text-gray-400 text-base sm:text-lg max-w-xl leading-relaxed">
-              Explore our completed projects across construction, renovations, plumbing, and electrical work. Quality craftsmanship you can trust.
+            <p className="mt-3 text-gray-400 text-base max-w-lg leading-[1.6]">
+              Completed projects across building, renovations, plumbing, and electrical work. Click any image for details.
             </p>
           </div>
 
           <Link
             href="/#contact"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded transition-colors text-sm sm:text-base self-start lg:self-auto"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-5 py-3 rounded-md transition-colors duration-200 text-sm self-start lg:self-auto min-h-[44px]"
           >
-            START YOUR PROJECT
-            <ArrowRight className="w-4 h-4" />
+            Start your project
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </div>
       </div>
@@ -308,7 +318,7 @@ function GalleryBanner() {
   )
 }
 
-/* ─────────── MAIN GALLERY ─────────── */
+/* ─────────── GALLERY CONTENT ─────────── */
 
 function GalleryContent() {
   const [activeCategory, setActiveCategory] = useState('All')
@@ -342,29 +352,18 @@ function GalleryContent() {
     }
   }
 
-  const layoutIcon = (l: GridLayout) => {
-    switch (l) {
-      case 'masonry': return LayoutGrid
-      case 'grid': return Grid3X3
-      case 'fullwidth': return Images
-    }
-  }
-
-  const layoutLabel = (l: GridLayout) => {
-    switch (l) {
-      case 'masonry': return 'Masonry'
-      case 'grid': return 'Grid'
-      case 'fullwidth': return 'Full Width'
-    }
-  }
+  const layoutConfig: { key: GridLayout; icon: typeof LayoutGrid; label: string }[] = [
+    { key: 'masonry', icon: LayoutGrid, label: 'Masonry' },
+    { key: 'grid', icon: Grid3X3, label: 'Grid' },
+    { key: 'fullwidth', icon: Images, label: 'Full width' },
+  ]
 
   return (
-    <section className="bg-[#0a0a0b] pb-20 sm:pb-28">
+    <section className="bg-[#0a0a0b] pb-20 sm:pb-28" aria-label="Project gallery">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Controls bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 sm:mb-10">
-          {/* Category filters */}
-          <div className="flex flex-wrap gap-2 sm:gap-3">
+        {/* Controls */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6 sm:mb-8">
+          <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter by category">
             {GALLERY_CATEGORIES.map((cat) => {
               const Icon = categoryIcon(cat)
               const isActive = activeCategory === cat
@@ -372,175 +371,166 @@ function GalleryContent() {
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide uppercase transition-all duration-300 ${
+                  className={`inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-[13px] font-semibold tracking-wide uppercase transition-all duration-200 min-h-[44px] ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
-                      : 'bg-[#111113] text-gray-400 border border-white/5 hover:border-blue-500/30 hover:text-white'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-[#111113] text-gray-500 border border-white/5 hover:border-blue-500/20 hover:text-white'
                   }`}
+                  role="tab"
+                  aria-selected={isActive}
                 >
-                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  <Icon className="w-3.5 h-3.5" aria-hidden="true" />
                   {cat}
                 </button>
               )
             })}
           </div>
 
-          {/* Layout toggle */}
-          <div className="flex items-center gap-1 bg-[#111113] border border-white/5 rounded-lg p-1">
-            {(['masonry', 'grid', 'fullwidth'] as GridLayout[]).map((l) => {
-              const Icon = layoutIcon(l)
-              return (
-                <button
-                  key={l}
-                  onClick={() => setLayout(l)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                    layout === l
-                      ? 'bg-blue-600/20 text-blue-400'
-                      : 'text-gray-500 hover:text-gray-300'
-                  }`}
-                  aria-label={`${layoutLabel(l)} layout`}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">{layoutLabel(l)}</span>
-                </button>
-              )
-            })}
+          <div className="flex items-center gap-0.5 bg-[#111113] border border-white/5 rounded-md p-0.5" role="radiogroup" aria-label="Gallery layout">
+            {layoutConfig.map(({ key, icon: Icon, label }) => (
+              <button
+                key={key}
+                onClick={() => setLayout(key)}
+                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded text-xs font-medium transition-colors duration-200 min-h-[44px] ${
+                  layout === key
+                    ? 'bg-blue-600/15 text-blue-400'
+                    : 'text-gray-600 hover:text-gray-400'
+                }`}
+                role="radio"
+                aria-checked={layout === key}
+                aria-label={`${label} layout`}
+              >
+                <Icon className="w-3.5 h-3.5" aria-hidden="true" />
+                <span className="hidden sm:inline">{label}</span>
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Image count */}
-        <p className="text-gray-500 text-sm mb-6">
+        <p className="text-gray-600 text-sm mb-5">
           Showing <span className="text-white font-medium">{filteredImages.length}</span> {filteredImages.length === 1 ? 'project' : 'projects'}
           {activeCategory !== 'All' && (
             <> in <span className="text-blue-400 font-medium">{activeCategory}</span></>
           )}
         </p>
 
-        {/* Masonry Layout */}
+        {/* Masonry */}
         {layout === 'masonry' && (
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 sm:gap-5 space-y-4 sm:space-y-5">
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4 space-y-3 sm:space-y-4">
             {filteredImages.map((image, index) => (
-              <div
+              <button
                 key={image.src}
-                className="group relative break-inside-avoid overflow-hidden rounded-xl cursor-pointer"
+                className="group relative break-inside-avoid overflow-hidden rounded-lg w-full text-left cursor-pointer"
                 onClick={() => setLightboxIndex(index)}
+                aria-label={`View: ${image.alt}`}
               >
                 <img
                   src={image.src}
                   alt={image.alt}
-                  className="w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
                   loading="lazy"
+                  width={400}
+                  height={300}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-4 sm:p-6">
-                  <span className="inline-block self-start px-3 py-1 bg-blue-600/30 backdrop-blur-sm text-blue-300 text-[10px] sm:text-xs font-semibold rounded-full uppercase tracking-wider mb-2 sm:mb-3">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-4 sm:p-5">
+                  <span className="inline-block self-start px-2.5 py-0.5 bg-blue-600/20 backdrop-blur-sm text-blue-300 text-[10px] font-semibold rounded-full uppercase tracking-[0.15em] mb-2">
                     {image.category}
                   </span>
-                  <p className="text-white text-sm sm:text-base font-medium leading-snug">
+                  <p className="text-white text-sm font-medium leading-snug">
                     {image.alt}
                   </p>
-                  <p className="text-gray-300 text-xs sm:text-sm mt-1 line-clamp-2">{image.description}</p>
-                  <div className="flex items-center gap-2 mt-2 sm:mt-3">
-                    <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />
-                    <span className="text-blue-400 text-xs sm:text-sm font-semibold">View Project</span>
-                  </div>
+                  <p className="text-gray-400 text-xs mt-1 line-clamp-2 leading-[1.5]">{image.description}</p>
                 </div>
-                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 sm:w-10 sm:h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-100 scale-75">
-                  <ZoomIn className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <div className="absolute top-2.5 right-2.5 w-8 h-8 bg-white/8 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <ZoomIn className="w-3.5 h-3.5 text-white" aria-hidden="true" />
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}
 
-        {/* Grid Layout */}
+        {/* Grid */}
         {layout === 'grid' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {filteredImages.map((image, index) => (
-              <div
+              <button
                 key={image.src}
-                className="group relative overflow-hidden rounded-xl cursor-pointer aspect-[4/3]"
+                className="group relative overflow-hidden rounded-lg aspect-[4/3] text-left cursor-pointer"
                 onClick={() => setLightboxIndex(index)}
+                aria-label={`View: ${image.alt}`}
               >
                 <img
                   src={image.src}
                   alt={image.alt}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
                   loading="lazy"
+                  width={400}
+                  height={300}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-4 sm:p-6">
-                  <span className="inline-block self-start px-3 py-1 bg-blue-600/30 backdrop-blur-sm text-blue-300 text-[10px] sm:text-xs font-semibold rounded-full uppercase tracking-wider mb-2 sm:mb-3">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-4 sm:p-5">
+                  <span className="inline-block self-start px-2.5 py-0.5 bg-blue-600/20 backdrop-blur-sm text-blue-300 text-[10px] font-semibold rounded-full uppercase tracking-[0.15em] mb-2">
                     {image.category}
                   </span>
-                  <p className="text-white text-sm sm:text-base font-medium leading-snug">
+                  <p className="text-white text-sm font-medium leading-snug">
                     {image.alt}
                   </p>
-                  <p className="text-gray-300 text-xs sm:text-sm mt-1 line-clamp-2">{image.description}</p>
-                  <div className="flex items-center gap-2 mt-2 sm:mt-3">
-                    <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />
-                    <span className="text-blue-400 text-xs sm:text-sm font-semibold">View Project</span>
-                  </div>
+                  <p className="text-gray-400 text-xs mt-1 line-clamp-2 leading-[1.5]">{image.description}</p>
                 </div>
-                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 sm:w-10 sm:h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-100 scale-75">
-                  <ZoomIn className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <div className="absolute top-2.5 right-2.5 w-8 h-8 bg-white/8 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <ZoomIn className="w-3.5 h-3.5 text-white" aria-hidden="true" />
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}
 
-        {/* Full Width Layout */}
+        {/* Full width */}
         {layout === 'fullwidth' && (
-          <div className="space-y-4 sm:space-y-6">
+          <div className="space-y-3 sm:space-y-4">
             {filteredImages.map((image, index) => (
-              <div
+              <button
                 key={image.src}
-                className="group relative overflow-hidden rounded-xl cursor-pointer"
+                className="group relative overflow-hidden rounded-lg w-full text-left cursor-pointer"
                 onClick={() => setLightboxIndex(index)}
+                aria-label={`View: ${image.alt}`}
               >
                 <div className="aspect-[21/9]">
                   <img
                     src={image.src}
                     alt={image.alt}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                     loading="lazy"
+                    width={1200}
+                    height={514}
                   />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent flex items-center">
-                  <div className="p-6 sm:p-10 lg:p-14 max-w-lg">
-                    <span className="inline-block px-3 py-1 bg-blue-600/30 backdrop-blur-sm text-blue-300 text-xs font-semibold rounded-full uppercase tracking-wider mb-3 sm:mb-4">
+                  <div className="p-5 sm:p-8 lg:p-12 max-w-md">
+                    <span className="inline-block px-2.5 py-0.5 bg-blue-600/20 backdrop-blur-sm text-blue-300 text-[10px] font-semibold rounded-full uppercase tracking-[0.15em] mb-3">
                       {image.category}
                     </span>
-                    <p className="text-white text-lg sm:text-xl lg:text-2xl font-bold leading-snug mb-2">
+                    <p className="text-white text-base sm:text-lg lg:text-xl font-bold leading-snug mb-1.5">
                       {image.alt}
                     </p>
-                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed">{image.description}</p>
-                    <div className="flex items-center gap-2 mt-3 sm:mt-4">
-                      <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
-                      <span className="text-blue-400 text-sm sm:text-base font-semibold">View Full Size</span>
-                    </div>
+                    <p className="text-gray-400 text-sm leading-[1.6]">{image.description}</p>
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}
 
         {/* Stats */}
-        <div className="mt-16 sm:mt-20 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-          {[
-            { value: '50+', label: 'Projects Completed' },
-            { value: '5+', label: 'Years Experience' },
-            { value: '100%', label: 'Client Satisfaction' },
-            { value: 'Nationwide', label: 'Service Coverage' },
-          ].map((stat) => (
+        <div className="mt-14 sm:mt-20 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          {STATS.map((stat) => (
             <div
               key={stat.label}
-              className="bg-[#111113] border border-white/5 rounded-xl p-4 sm:p-6 text-center"
+              className="bg-[#111113] border border-white/5 rounded-lg p-4 sm:p-5 text-center"
             >
-              <p className="text-blue-400 text-2xl sm:text-3xl lg:text-4xl font-extrabold mb-1">
+              <p className="text-blue-400 text-xl sm:text-2xl lg:text-3xl font-extrabold mb-0.5">
                 {stat.value}
               </p>
-              <p className="text-gray-400 text-xs sm:text-sm uppercase tracking-wider font-medium">
+              <p className="text-gray-500 text-[11px] sm:text-xs uppercase tracking-[0.15em] font-medium">
                 {stat.label}
               </p>
             </div>
@@ -548,42 +538,41 @@ function GalleryContent() {
         </div>
 
         {/* CTA */}
-        <div className="mt-16 sm:mt-20 bg-gradient-to-r from-blue-950/40 via-[#111113] to-blue-950/40 border border-white/5 rounded-2xl p-8 sm:p-12 text-center">
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-white uppercase mb-4">
-            Like What You See?
+        <div className="mt-14 sm:mt-20 bg-[#111113] border border-white/5 rounded-lg p-6 sm:p-10 text-center">
+          <h3 className="text-xl sm:text-2xl font-extrabold text-white uppercase tracking-tight mb-3">
+            Interested in working with us?
           </h3>
-          <p className="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
-            Let us bring the same quality and dedication to your project. Get in touch for a free consultation and quote.
+          <p className="text-gray-400 text-sm sm:text-base max-w-md mx-auto mb-6 leading-[1.6]">
+            Get in touch for a free on-site assessment and written quotation.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/#contact"
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded transition-colors text-sm sm:text-base"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-5 py-3 rounded-md transition-colors duration-200 text-sm min-h-[44px]"
             >
-              GET A FREE QUOTE
-              <ArrowRight className="w-4 h-4" />
+              Get a free quote
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <a
               href="tel:0670318635"
-              className="inline-flex items-center gap-2 border border-white/30 hover:bg-white/10 text-white font-semibold px-6 py-3 rounded transition-colors text-sm sm:text-base"
+              className="inline-flex items-center gap-2 border border-white/15 hover:bg-white/8 active:bg-white/12 text-white font-semibold px-5 py-3 rounded-md transition-colors duration-200 text-sm min-h-[44px]"
             >
-              <Phone className="w-4 h-4" />
-              CALL US
+              <Phone className="w-4 h-4" aria-hidden="true" />
+              Call us
             </a>
             <a
               href="https://wa.me/27670318635"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 border border-white/30 hover:bg-white/10 text-white font-semibold px-6 py-3 rounded transition-colors text-sm sm:text-base"
+              className="inline-flex items-center gap-2 border border-white/15 hover:bg-white/8 active:bg-white/12 text-white font-semibold px-5 py-3 rounded-md transition-colors duration-200 text-sm min-h-[44px]"
             >
-              <MessageCircle className="w-4 h-4" />
-              WHATSAPP
+              <MessageCircle className="w-4 h-4" aria-hidden="true" />
+              WhatsApp
             </a>
           </div>
         </div>
       </div>
 
-      {/* Lightbox */}
       {lightboxIndex !== null && (
         <Lightbox
           images={filteredImages}
@@ -601,51 +590,50 @@ function GalleryContent() {
 
 function Footer() {
   return (
-    <footer className="bg-[#080809] border-t border-white/5 pt-16 pb-8">
+    <footer className="bg-[#080809] border-t border-white/5 pt-14 pb-8" role="contentinfo">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 mb-10">
           <div className="sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 bg-blue-600 rounded flex items-center justify-center">
-                <span className="text-white font-bold text-lg">N</span>
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center">
+                <span className="text-white font-bold text-base" aria-hidden="true">N</span>
               </div>
-              <div className="leading-tight">
+              <div className="leading-none">
                 <div className="text-white font-bold text-sm tracking-wide">NOW &amp; ALWAYS</div>
-                <div className="text-gray-500 text-xs tracking-widest">(PTY) LTD</div>
+                <div className="text-gray-600 text-[10px] tracking-[0.2em] uppercase">(Pty) Ltd</div>
               </div>
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed mb-2">
-              Comprehensive construction &amp; maintenance solutions. Serving
-              Newcastle &amp; nationwide across South Africa.
+            <p className="text-gray-500 text-sm leading-[1.6] mb-2 max-w-xs">
+              Construction and maintenance services. Newcastle, KwaZulu-Natal — working nationwide across South Africa.
             </p>
-            <p className="text-gray-500 text-xs">Reg: 2021/438875/07</p>
+            <p className="text-gray-600 text-xs">Reg: 2021/438875/07</p>
           </div>
 
-          <div>
-            <h4 className="text-white font-bold text-sm uppercase tracking-wide mb-4">NAVIGATION</h4>
-            <ul className="space-y-3">
+          <nav aria-label="Footer navigation">
+            <h4 className="text-white font-bold text-xs uppercase tracking-[0.15em] mb-3">Navigation</h4>
+            <ul className="space-y-2.5">
               {[
                 { label: 'Home', href: '/' },
-                { label: 'About Us', href: '/#about' },
+                { label: 'About', href: '/#about' },
                 { label: 'Services', href: '/#services' },
                 { label: 'Gallery', href: '/gallery' },
                 { label: 'Contact', href: '/#contact' },
               ].map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="text-gray-400 hover:text-white text-sm transition-colors">
+                  <Link href={link.href} className="text-gray-500 hover:text-white text-sm transition-colors duration-200">
                     {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           <div>
-            <h4 className="text-white font-bold text-sm uppercase tracking-wide mb-4">SERVICES</h4>
-            <ul className="space-y-3">
+            <h4 className="text-white font-bold text-xs uppercase tracking-[0.15em] mb-3">Services</h4>
+            <ul className="space-y-2.5">
               {['Renovations', 'Plumbing', 'Electrical', 'Welding', 'Building'].map((link) => (
                 <li key={link}>
-                  <Link href="/#services" className="text-gray-400 hover:text-white text-sm transition-colors">
+                  <Link href="/#services" className="text-gray-500 hover:text-white text-sm transition-colors duration-200">
                     {link}
                   </Link>
                 </li>
@@ -654,25 +642,20 @@ function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-bold text-sm uppercase tracking-wide mb-4">GET IN TOUCH</h4>
-            <ul className="space-y-3">
+            <h4 className="text-white font-bold text-xs uppercase tracking-[0.15em] mb-3">Get in touch</h4>
+            <ul className="space-y-2.5">
               <li>
-                <a href="tel:0670318635" className="text-gray-400 hover:text-white text-sm transition-colors">
+                <a href="tel:0670318635" className="text-gray-500 hover:text-white text-sm transition-colors duration-200">
                   067 031 8635
                 </a>
               </li>
               <li>
-                <a
-                  href="https://wa.me/27670318635"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white text-sm transition-colors"
-                >
+                <a href="https://wa.me/27670318635" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white text-sm transition-colors duration-200">
                   WhatsApp
                 </a>
               </li>
               <li>
-                <a href="mailto:projects@nowandalways.co.za" className="text-gray-400 hover:text-white text-sm transition-colors break-all">
+                <a href="mailto:projects@nowandalways.co.za" className="text-gray-500 hover:text-white text-sm transition-colors duration-200 break-all">
                   projects@nowandalways.co.za
                 </a>
               </li>
@@ -680,19 +663,19 @@ function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-gray-500 text-xs sm:text-sm">
+        <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-gray-600 text-xs">
             &copy; {new Date().getFullYear()} Now &amp; Always (PTY) LTD. All rights reserved.
           </p>
-          <div className="flex items-center gap-4">
-            <a href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="Facebook">
-              <Facebook className="w-5 h-5" />
+          <div className="flex items-center gap-3">
+            <a href="#" className="text-gray-600 hover:text-white transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Facebook">
+              <Facebook className="w-4 h-4" />
             </a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="Instagram">
-              <Instagram className="w-5 h-5" />
+            <a href="#" className="text-gray-600 hover:text-white transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Instagram">
+              <Instagram className="w-4 h-4" />
             </a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="LinkedIn">
-              <Linkedin className="w-5 h-5" />
+            <a href="#" className="text-gray-600 hover:text-white transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="LinkedIn">
+              <Linkedin className="w-4 h-4" />
             </a>
           </div>
         </div>
@@ -707,7 +690,7 @@ export default function GalleryPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         <GalleryBanner />
         <GalleryContent />
       </main>
