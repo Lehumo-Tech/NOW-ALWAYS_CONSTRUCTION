@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState } from 'react'
+import Link from 'next/link'
 import {
   Phone,
   ArrowRight,
@@ -17,18 +18,23 @@ import {
   Menu,
   X,
   Quote,
-  XIcon,
-  ZoomIn,
   Eye,
   Building2,
   Paintbrush,
   Droplets,
   HardHat,
+  ArrowUpRight,
 } from 'lucide-react'
 
 /* ─────────── DATA ─────────── */
 
-const NAV_LINKS = ['HOME', 'ABOUT', 'SERVICES', 'PROJECTS', 'CONTACT']
+const NAV_LINKS = [
+  { label: 'HOME', href: '/' },
+  { label: 'ABOUT', href: '#about' },
+  { label: 'SERVICES', href: '#services' },
+  { label: 'PROJECTS', href: '/gallery' },
+  { label: 'CONTACT', href: '#contact' },
+]
 
 const SERVICES = [
   {
@@ -128,8 +134,6 @@ const GALLERY_IMAGES = [
   },
 ]
 
-const GALLERY_CATEGORIES = ['All', 'Building', 'Renovations', 'Plumbing', 'Electrical']
-
 /* ─────────── COMPONENTS ─────────── */
 
 function Header() {
@@ -153,15 +157,15 @@ function Header() {
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
             {NAV_LINKS.map((link, i) => (
-              <a
-                key={link}
-                href={`#${link.toLowerCase()}`}
+              <Link
+                key={link.label}
+                href={link.href}
                 className={`text-sm tracking-wide font-medium transition-colors ${
                   i === 0 ? 'text-blue-400' : 'text-gray-300 hover:text-white'
                 }`}
               >
-                {link}
-              </a>
+                {link.label}
+              </Link>
             ))}
           </nav>
 
@@ -190,16 +194,16 @@ function Header() {
         <div className="lg:hidden bg-black/95 border-t border-white/10">
           <nav className="flex flex-col px-6 py-4 gap-4">
             {NAV_LINKS.map((link, i) => (
-              <a
-                key={link}
-                href={`#${link.toLowerCase()}`}
+              <Link
+                key={link.label}
+                href={link.href}
                 onClick={() => setMobileOpen(false)}
                 className={`text-sm tracking-wide font-medium ${
                   i === 0 ? 'text-blue-400' : 'text-gray-300'
                 }`}
               >
-                {link}
-              </a>
+                {link.label}
+              </Link>
             ))}
             <a
               href="tel:0670318635"
@@ -385,118 +389,11 @@ function TestimonialsSection() {
   )
 }
 
-/* ─────────── GALLERY / PORTFOLIO SECTION ─────────── */
+/* ─────────── FEATURED PROJECTS (links to gallery page) ─────────── */
 
-function Lightbox({
-  images,
-  currentIndex,
-  onClose,
-  onPrev,
-  onNext,
-}: {
-  images: typeof GALLERY_IMAGES
-  currentIndex: number
-  onClose: () => void
-  onPrev: () => void
-  onNext: () => void
-}) {
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-      if (e.key === 'ArrowLeft') onPrev()
-      if (e.key === 'ArrowRight') onNext()
-    }
-    window.addEventListener('keydown', handleKey)
-    document.body.style.overflow = 'hidden'
-    return () => {
-      window.removeEventListener('keydown', handleKey)
-      document.body.style.overflow = ''
-    }
-  }, [onClose, onPrev, onNext])
+const FEATURED_IMAGES = GALLERY_IMAGES.slice(0, 6)
 
-  return (
-    <div
-      className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center"
-      onClick={onClose}
-    >
-      {/* Close button */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors z-10"
-        aria-label="Close lightbox"
-      >
-        <XIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-      </button>
-
-      {/* Previous */}
-      <button
-        onClick={(e) => { e.stopPropagation(); onPrev() }}
-        className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-14 sm:h-14 bg-white/10 hover:bg-blue-600/30 rounded-full flex items-center justify-center transition-colors z-10"
-        aria-label="Previous image"
-      >
-        <ChevronLeft className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
-      </button>
-
-      {/* Image */}
-      <div
-        className="max-w-[90vw] max-h-[85vh] flex items-center justify-center"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <img
-          src={images[currentIndex].src}
-          alt={images[currentIndex].alt}
-          className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
-        />
-      </div>
-
-      {/* Next */}
-      <button
-        onClick={(e) => { e.stopPropagation(); onNext() }}
-        className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-14 sm:h-14 bg-white/10 hover:bg-blue-600/30 rounded-full flex items-center justify-center transition-colors z-10"
-        aria-label="Next image"
-      >
-        <ChevronRight className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
-      </button>
-
-      {/* Info bar */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent pt-16 pb-6 px-6">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div>
-            <span className="inline-block px-3 py-1 bg-blue-600/20 text-blue-400 text-xs font-semibold rounded-full uppercase tracking-wider mb-2">
-              {images[currentIndex].category}
-            </span>
-            <p className="text-white text-sm sm:text-base">{images[currentIndex].alt}</p>
-          </div>
-          <span className="text-gray-400 text-sm">
-            {currentIndex + 1} / {images.length}
-          </span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function GallerySection() {
-  const [activeCategory, setActiveCategory] = useState('All')
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
-
-  const filteredImages =
-    activeCategory === 'All'
-      ? GALLERY_IMAGES
-      : GALLERY_IMAGES.filter((img) => img.category === activeCategory)
-
-  const handlePrev = useCallback(() => {
-    setLightboxIndex((prev) =>
-      prev !== null ? (prev === 0 ? filteredImages.length - 1 : prev - 1) : null
-    )
-  }, [filteredImages.length])
-
-  const handleNext = useCallback(() => {
-    setLightboxIndex((prev) =>
-      prev !== null ? (prev === filteredImages.length - 1 ? 0 : prev + 1) : null
-    )
-  }, [filteredImages.length])
-
+function FeaturedProjectsSection() {
   const categoryIcon = (cat: string) => {
     switch (cat) {
       case 'Building': return Building2
@@ -510,109 +407,61 @@ function GallerySection() {
   return (
     <section id="projects" className="bg-[#0a0a0b] py-20 sm:py-28 border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
         <div className="text-center mb-12 sm:mb-16">
           <p className="text-blue-400 text-xs sm:text-sm font-semibold tracking-widest uppercase mb-2">
             OUR PORTFOLIO
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white uppercase">
-            PROJECT GALLERY
+            FEATURED PROJECTS
           </h2>
           <p className="mt-4 text-gray-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Browse through our completed projects and see the quality craftsmanship we deliver. Every project reflects our commitment to excellence.
+            A glimpse of our recent work. Visit our full gallery to explore all completed projects.
           </p>
         </div>
 
-        {/* Category filters */}
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 sm:mb-14">
-          {GALLERY_CATEGORIES.map((cat) => {
-            const Icon = categoryIcon(cat)
-            const isActive = activeCategory === cat
+        {/* Featured grid - 6 images */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+          {FEATURED_IMAGES.map((image) => {
+            const Icon = categoryIcon(image.category)
             return (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide uppercase transition-all duration-300 ${
-                  isActive
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
-                    : 'bg-[#111113] text-gray-400 border border-white/5 hover:border-blue-500/30 hover:text-white'
-                }`}
+              <div
+                key={image.src}
+                className="group relative overflow-hidden rounded-xl aspect-[4/3]"
               >
-                <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                {cat}
-              </button>
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-4 sm:p-6">
+                  <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                    <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />
+                    <span className="text-blue-300 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
+                      {image.category}
+                    </span>
+                  </div>
+                  <p className="text-white text-sm sm:text-base font-medium leading-snug">
+                    {image.alt}
+                  </p>
+                </div>
+              </div>
             )
           })}
         </div>
 
-        {/* Masonry Gallery Grid */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 sm:gap-5 space-y-4 sm:space-y-5">
-          {filteredImages.map((image, index) => (
-            <div
-              key={image.src}
-              className="group relative break-inside-avoid overflow-hidden rounded-xl cursor-pointer"
-              onClick={() => setLightboxIndex(index)}
-            >
-              <img
-                src={image.src}
-                alt={image.alt}
-                className="w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                loading="lazy"
-              />
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-4 sm:p-6">
-                <span className="inline-block self-start px-3 py-1 bg-blue-600/30 backdrop-blur-sm text-blue-300 text-[10px] sm:text-xs font-semibold rounded-full uppercase tracking-wider mb-2 sm:mb-3">
-                  {image.category}
-                </span>
-                <p className="text-white text-sm sm:text-base font-medium leading-snug">
-                  {image.alt}
-                </p>
-                <div className="flex items-center gap-2 mt-2 sm:mt-3">
-                  <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />
-                  <span className="text-blue-400 text-xs sm:text-sm font-semibold">View Project</span>
-                </div>
-              </div>
-              {/* Zoom icon top-right */}
-              <div className="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 sm:w-10 sm:h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-100 scale-75">
-                <ZoomIn className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Gallery stats */}
-        <div className="mt-14 sm:mt-20 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-          {[
-            { value: '50+', label: 'Projects Completed' },
-            { value: '5+', label: 'Years Experience' },
-            { value: '100%', label: 'Client Satisfaction' },
-            { value: ' Nationwide', label: 'Service Coverage' },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="bg-[#111113] border border-white/5 rounded-xl p-4 sm:p-6 text-center"
-            >
-              <p className="text-blue-400 text-2xl sm:text-3xl lg:text-4xl font-extrabold mb-1">
-                {stat.value}
-              </p>
-              <p className="text-gray-400 text-xs sm:text-sm uppercase tracking-wider font-medium">
-                {stat.label}
-              </p>
-            </div>
-          ))}
+        {/* CTA to gallery page */}
+        <div className="mt-10 sm:mt-14 text-center">
+          <Link
+            href="/gallery"
+            className="group inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-lg transition-all text-sm sm:text-base shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40"
+          >
+            <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+            VIEW FULL GALLERY
+            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </Link>
         </div>
       </div>
-
-      {/* Lightbox */}
-      {lightboxIndex !== null && (
-        <Lightbox
-          images={filteredImages}
-          currentIndex={lightboxIndex}
-          onClose={() => setLightboxIndex(null)}
-          onPrev={handlePrev}
-          onNext={handleNext}
-        />
-      )}
     </section>
   )
 }
@@ -681,15 +530,21 @@ function Footer() {
               NAVIGATION
             </h4>
             <ul className="space-y-3">
-              {['Home', 'About Us', 'Services', 'Projects', 'Contact'].map(
+              {[
+                { label: 'Home', href: '/' },
+                { label: 'About Us', href: '#about' },
+                { label: 'Services', href: '#services' },
+                { label: 'Projects', href: '/gallery' },
+                { label: 'Contact', href: '#contact' },
+              ].map(
                 (link) => (
-                  <li key={link}>
-                    <a
-                      href={`#${link.toLowerCase().replace(/\s/g, '')}`}
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
                       className="text-gray-400 hover:text-white text-sm transition-colors"
                     >
-                      {link}
-                    </a>
+                      {link.label}
+                    </Link>
                   </li>
                 )
               )}
@@ -796,7 +651,7 @@ export default function Home() {
       <main className="flex-1">
         <HeroSection />
         <ServicesSection />
-        <GallerySection />
+        <FeaturedProjectsSection />
         <TestimonialsSection />
         <CTASection />
       </main>
