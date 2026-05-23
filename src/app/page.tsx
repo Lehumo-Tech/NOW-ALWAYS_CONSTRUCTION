@@ -12,11 +12,6 @@ import {
   HomeIcon,
   ChevronLeft,
   ChevronRight,
-  Facebook,
-  Linkedin,
-  Instagram,
-  Menu,
-  X,
   Quote,
   Eye,
   Building2,
@@ -36,6 +31,10 @@ import {
   Users,
   BadgeCheck,
 } from 'lucide-react'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
+import QuoteForm from '@/components/QuoteForm'
+import { SITE } from '@/lib/config'
 
 /* ─────────── SCROLL REVEAL HOOK ─────────── */
 
@@ -73,8 +72,8 @@ function useScrollReveal() {
 
 /* ─────────── 3D TILT HOOK ─────────── */
 
-function useTilt() {
-  const ref = useRef<HTMLDivElement>(null)
+function useTilt<T extends HTMLElement = HTMLDivElement>() {
+  const ref = useRef<T>(null)
 
   const handleMove = useCallback((e: MouseEvent) => {
     const el = ref.current
@@ -110,14 +109,6 @@ function useTilt() {
 }
 
 /* ─────────── DATA ─────────── */
-
-const NAV_LINKS = [
-  { label: 'Home', href: '/' },
-  { label: 'About', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Projects', href: '/gallery' },
-  { label: 'Contact', href: '#contact' },
-]
 
 const SERVICES = [
   {
@@ -296,82 +287,6 @@ const CREDENTIALS = [
 
 /* ─────────── COMPONENTS ─────────── */
 
-function Header() {
-  const [mobileOpen, setMobileOpen] = useState(false)
-
-  return (
-    <header className="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-white/8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
-          <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="Now & Always Construction — Home">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-md flex items-center justify-center float-slow">
-              <span className="text-white font-bold text-base sm:text-xl" aria-hidden="true">N</span>
-            </div>
-            <div className="leading-none">
-              <div className="text-white font-bold text-sm sm:text-base tracking-wide">NOW &amp; ALWAYS</div>
-              <div className="text-gray-500 text-[9px] sm:text-[10px] tracking-[0.2em] uppercase">Construction</div>
-            </div>
-          </Link>
-
-          <nav className="hidden lg:flex items-center gap-7 xl:gap-9" aria-label="Primary navigation">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-[13px] tracking-wide font-medium text-gray-400 hover:text-white transition-colors duration-200"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-2.5">
-            <a
-              href="tel:0670318635"
-              className="hidden sm:inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-[13px] font-semibold px-4 py-2.5 rounded-md haptic-glow min-h-[44px]"
-            >
-              <Phone className="w-4 h-4" aria-hidden="true" />
-              067 031 8635
-            </a>
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden text-white p-2 min-w-[44px] min-h-[44px] flex items-center justify-center haptic-ripple rounded-lg"
-              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={mobileOpen}
-            >
-              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {mobileOpen && (
-        <div className="lg:hidden glass-strong border-t border-white/8" role="dialog" aria-label="Mobile navigation">
-          <nav className="flex flex-col px-6 py-5 gap-4" aria-label="Mobile navigation">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="text-[15px] tracking-wide font-medium text-gray-300 hover:text-white transition-colors py-1"
-              >
-                {link.label}
-              </Link>
-            ))}
-            <a
-              href="tel:0670318635"
-              className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white text-[14px] font-semibold px-5 py-3 rounded-md mt-1 haptic-press min-h-[44px]"
-            >
-              <Phone className="w-4 h-4" aria-hidden="true" />
-              067 031 8635
-            </a>
-          </nav>
-        </div>
-      )}
-    </header>
-  )
-}
-
 function HeroSection() {
   return (
     <section
@@ -409,14 +324,14 @@ function HeroSection() {
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </a>
           <a
-            href="tel:0670318635"
+            href={`tel:${SITE.phoneRaw}`}
             className="inline-flex items-center gap-2 glass hover:bg-white/12 text-white font-semibold px-5 sm:px-6 py-3 rounded-md text-[13px] sm:text-base min-h-[44px] haptic-press"
           >
             <Phone className="w-4 h-4" aria-hidden="true" />
             Call us
           </a>
           <a
-            href="https://wa.me/27670318635"
+            href={SITE.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 glass hover:bg-white/12 text-white font-semibold px-5 sm:px-6 py-3 rounded-md text-[13px] sm:text-base min-h-[44px] haptic-press"
@@ -445,7 +360,7 @@ function HeroSection() {
 
 function ServicesSection() {
   const sectionRef = useScrollReveal()
-  const tiltRef1 = useTilt()
+  const tiltRef1 = useTilt<HTMLAnchorElement>()
 
   return (
     <section id="services" ref={sectionRef} className="bg-[#0a0a0b] py-14 sm:py-20 lg:py-28" aria-label="Services">
@@ -819,36 +734,124 @@ function TestimonialsSection() {
   )
 }
 
-function CTASection() {
+function ContactSection() {
+  const sectionRef = useScrollReveal()
+
   return (
-    <section className="relative py-14 sm:py-20 lg:py-28 overflow-hidden" aria-label="Call to action">
+    <section id="contact" ref={sectionRef} className="relative py-14 sm:py-20 lg:py-28 overflow-hidden" aria-label="Contact us">
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0b] via-blue-950/15 to-[#0a0a0b]" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="scroll-reveal text-[1.75rem] sm:text-4xl lg:text-[2.75rem] font-extrabold text-white uppercase leading-[1.1] tracking-tight mb-3 sm:mb-4">
-          Ready to start?
-        </h2>
-        <p className="scroll-reveal stagger-1 text-gray-300 text-[14px] sm:text-base lg:text-lg max-w-lg mx-auto mb-6 sm:mb-8 leading-[1.6]">
-          Call us for a free on-site assessment and written quotation. No obligation.
-        </p>
-        <div className="scroll-reveal stagger-2 flex flex-wrap justify-center gap-2.5 sm:gap-3">
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-5 sm:px-7 py-3 sm:py-3.5 rounded-md text-[13px] sm:text-base min-h-[44px] haptic-glow"
-          >
-            Get a free quote
-            <ArrowRight className="w-4 h-4" aria-hidden="true" />
-          </a>
-          <a
-            href="tel:0670318635"
-            className="inline-flex items-center gap-2 glass hover:bg-white/12 text-white font-semibold px-5 sm:px-7 py-3 sm:py-3.5 rounded-md text-[13px] sm:text-base min-h-[44px] haptic-press"
-          >
-            <Phone className="w-4 h-4" aria-hidden="true" />
-            067 031 8635
-          </a>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 sm:gap-10 lg:gap-12">
+          {/* Left: CTA text + contact info */}
+          <div className="lg:col-span-2 scroll-slide-left">
+            <h2 className="text-[1.75rem] sm:text-4xl lg:text-[2.75rem] font-extrabold text-white uppercase leading-[1.1] tracking-tight mb-3 sm:mb-4">
+              Ready to start?
+            </h2>
+            <p className="text-gray-300 text-[14px] sm:text-base lg:text-lg max-w-lg leading-[1.6] mb-6 sm:mb-8">
+              Call us for a free on-site assessment and written quotation. No obligation.
+            </p>
+
+            <div className="space-y-4 mb-6 sm:mb-8">
+              <a href={`tel:${SITE.phoneRaw}`} className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
+                <div className="w-10 h-10 glass-blue rounded-lg flex items-center justify-center shrink-0">
+                  <Phone className="w-5 h-5 text-blue-400" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Phone</p>
+                  <p className="text-white text-sm font-semibold group-hover:text-blue-400 transition-colors">{SITE.phone}</p>
+                </div>
+              </a>
+
+              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
+                <div className="w-10 h-10 glass-blue rounded-lg flex items-center justify-center shrink-0">
+                  <MessageCircle className="w-5 h-5 text-blue-400" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">WhatsApp</p>
+                  <p className="text-white text-sm font-semibold group-hover:text-blue-400 transition-colors">Chat with us</p>
+                </div>
+              </a>
+
+              <a href={`mailto:${SITE.email}`} className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
+                <div className="w-10 h-10 glass-blue rounded-lg flex items-center justify-center shrink-0">
+                  <Mail className="w-5 h-5 text-blue-400" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Email</p>
+                  <p className="text-white text-sm font-semibold group-hover:text-blue-400 transition-colors break-all">{SITE.email}</p>
+                </div>
+              </a>
+
+              <a href={`https://maps.google.com/?q=${SITE.location.city},${SITE.location.province},${SITE.location.country}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
+                <div className="w-10 h-10 glass-blue rounded-lg flex items-center justify-center shrink-0">
+                  <MapPin className="w-5 h-5 text-blue-400" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Location</p>
+                  <p className="text-white text-sm font-semibold group-hover:text-blue-400 transition-colors">{SITE.location.city}, {SITE.location.province}</p>
+                </div>
+              </a>
+            </div>
+
+            <div className="glass rounded-lg p-4">
+              <p className="text-gray-500 text-[11px] sm:text-xs leading-[1.5]">
+                By submitting a quote request, you consent to the processing of your personal information in accordance with our{' '}
+                <Link href="/privacy" className="text-blue-400 hover:text-blue-300 underline underline-offset-2 transition-colors">Privacy Policy</Link>{' '}
+                and the Protection of Personal Information Act (POPIA).
+              </p>
+            </div>
+          </div>
+
+          {/* Right: Quote Form */}
+          <div className="lg:col-span-3 scroll-slide-right">
+            <QuoteForm />
+          </div>
         </div>
       </div>
     </section>
+  )
+}
+
+/* ─────────── MAP LAZY LOADER ─────────── */
+
+function MapEmbed() {
+  const [loaded, setLoaded] = useState(false)
+  const MAPS_EMBED_URL = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55251.37783998458!2d29.8896!3d-27.7579!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ee6b1c0e3bc9a43%3A0x5cf1f0b0a6f0e8c8!2sNewcastle%2C%20South%20Africa!5e0!3m2!1sen!2sza!4v1700000000000!5m2!1sen!2sza'
+
+  if (!loaded) {
+    return (
+      <div
+        className="lg:col-span-3 scroll-slide-left rounded-lg overflow-hidden border border-white/5 h-[300px] sm:h-[400px] lg:h-[460px] glass flex flex-col items-center justify-center gap-3 cursor-pointer group"
+        onClick={() => setLoaded(true)}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setLoaded(true) }}
+        role="button"
+        tabIndex={0}
+        aria-label="Load map of Newcastle, KwaZulu-Natal"
+      >
+        <div className="w-14 h-14 glass-blue rounded-full flex items-center justify-center group-hover:bg-blue-600/20 transition-colors duration-200">
+          <MapPin className="w-6 h-6 text-blue-400" aria-hidden="true" />
+        </div>
+        <p className="text-white font-semibold text-sm sm:text-base">Click to load map</p>
+        <p className="text-gray-500 text-[11px] sm:text-xs">Newcastle, KwaZulu-Natal, South Africa</p>
+        <p className="text-gray-600 text-[10px]">Saves data on slow connections</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="lg:col-span-3 scroll-slide-left rounded-lg overflow-hidden border border-white/5 h-[300px] sm:h-[400px] lg:h-[460px]">
+      <iframe
+        src={MAPS_EMBED_URL}
+        width="100%"
+        height="100%"
+        style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) brightness(0.95) contrast(0.9)' }}
+        allowFullScreen
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        title="Now & Always Construction — Newcastle, KwaZulu-Natal"
+      />
+    </div>
   )
 }
 
@@ -868,24 +871,13 @@ function MapSection() {
             Our location
           </h2>
           <p className="mt-2 sm:mt-3 text-gray-400 text-[14px] sm:text-base max-w-lg mx-auto leading-[1.6]">
-            Based in Newcastle, KwaZulu-Natal — serving clients across South Africa. Visit us or give us a call.
+            Based in {SITE.location.city}, {SITE.location.province} — serving clients across {SITE.location.country}. Visit us or give us a call.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-6">
-          {/* Map embed */}
-          <div className="lg:col-span-3 scroll-slide-left rounded-lg overflow-hidden border border-white/5 h-[300px] sm:h-[400px] lg:h-[460px]">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55251.37783998458!2d29.8896!3d-27.7579!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ee6b1c0e3bc9a43%3A0x5cf1f0b0a6f0e8c8!2sNewcastle%2C%20South%20Africa!5e0!3m2!1sen!2sza!4v1700000000000!5m2!1sen!2sza"
-              width="100%"
-              height="100%"
-              style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) brightness(0.95) contrast(0.9)' }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Now & Always Construction — Newcastle, KwaZulu-Natal"
-            />
-          </div>
+          {/* Map embed — click-to-load for low-bandwidth users */}
+          <MapEmbed />
 
           {/* Contact info card */}
           <div className="lg:col-span-2 scroll-slide-right">
@@ -896,23 +888,23 @@ function MapSection() {
                     <MapPin className="w-5 h-5 text-blue-400" aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="text-white font-bold text-sm sm:text-base">Newcastle, KZN</p>
-                    <p className="text-gray-500 text-[11px] sm:text-xs">South Africa</p>
+                    <p className="text-white font-bold text-sm sm:text-base">{SITE.location.city}, KZN</p>
+                    <p className="text-gray-500 text-[11px] sm:text-xs">{SITE.location.country}</p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <a href="tel:0670318635" className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
+                  <a href={`tel:${SITE.phoneRaw}`} className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
                     <div className="w-9 h-9 glass-blue rounded-lg flex items-center justify-center shrink-0">
                       <Phone className="w-4 h-4 text-blue-400" aria-hidden="true" />
                     </div>
                     <div>
                       <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Phone</p>
-                      <p className="text-white text-sm font-semibold group-hover:text-blue-400 transition-colors">067 031 8635</p>
+                      <p className="text-white text-sm font-semibold group-hover:text-blue-400 transition-colors">{SITE.phone}</p>
                     </div>
                   </a>
 
-                  <a href="https://wa.me/27670318635" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
+                  <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
                     <div className="w-9 h-9 glass-blue rounded-lg flex items-center justify-center shrink-0">
                       <MessageCircle className="w-4 h-4 text-blue-400" aria-hidden="true" />
                     </div>
@@ -922,17 +914,17 @@ function MapSection() {
                     </div>
                   </a>
 
-                  <a href="mailto:projects@nowandalways.co.za" className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
+                  <a href={`mailto:${SITE.email}`} className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
                     <div className="w-9 h-9 glass-blue rounded-lg flex items-center justify-center shrink-0">
                       <Mail className="w-4 h-4 text-blue-400" aria-hidden="true" />
                     </div>
                     <div>
                       <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Email</p>
-                      <p className="text-white text-sm font-semibold group-hover:text-blue-400 transition-colors break-all">projects@nowandalways.co.za</p>
+                      <p className="text-white text-sm font-semibold group-hover:text-blue-400 transition-colors break-all">{SITE.email}</p>
                     </div>
                   </a>
 
-                  <a href="https://maps.google.com/?q=Newcastle,KwaZulu-Natal,South+Africa" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
+                  <a href={`https://maps.google.com/?q=${SITE.location.city},${SITE.location.province},${SITE.location.country}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group haptic-press rounded-lg p-2 -m-2">
                     <div className="w-9 h-9 glass-blue rounded-lg flex items-center justify-center shrink-0">
                       <Navigation className="w-4 h-4 text-blue-400" aria-hidden="true" />
                     </div>
@@ -946,126 +938,13 @@ function MapSection() {
 
               <div className="mt-6 pt-4 border-t border-white/5">
                 <p className="text-gray-600 text-[11px] uppercase tracking-wider font-medium">Registration</p>
-                <p className="text-gray-400 text-xs mt-1">2021/438875/07</p>
+                <p className="text-gray-400 text-xs mt-1">{SITE.regNumber}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-  )
-}
-
-function Footer() {
-  const [year, setYear] = useState<number | null>(null)
-
-  useEffect(() => {
-    setYear(new Date().getFullYear())
-  }, [])
-
-  return (
-    <footer id="contact" className="bg-[#080809] border-t border-white/5 pt-10 sm:pt-14 pb-8" role="contentinfo">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-6 mb-8 sm:mb-10">
-          <div className="col-span-2 sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center gap-2.5 mb-3">
-              <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center">
-                <span className="text-white font-bold text-base" aria-hidden="true">N</span>
-              </div>
-              <div className="leading-none">
-                <div className="text-white font-bold text-sm tracking-wide">NOW &amp; ALWAYS</div>
-                <div className="text-gray-600 text-[10px] tracking-[0.2em] uppercase">(Pty) Ltd</div>
-              </div>
-            </div>
-            <p className="text-gray-500 text-[13px] sm:text-sm leading-[1.6] mb-2 max-w-xs">
-              Construction and maintenance services. Newcastle, KwaZulu-Natal — working nationwide across South Africa.
-            </p>
-            <p className="text-gray-600 text-xs">Reg: 2021/438875/07</p>
-          </div>
-
-          <nav aria-label="Footer navigation">
-            <h4 className="text-white font-bold text-xs uppercase tracking-[0.15em] mb-3">
-              Navigation
-            </h4>
-            <ul className="space-y-2.5">
-              {[
-                { label: 'Home', href: '/' },
-                { label: 'About', href: '#about' },
-                { label: 'Services', href: '#services' },
-                { label: 'Gallery', href: '/gallery' },
-                { label: 'Contact', href: '#contact' },
-              ].map((link) => (
-                <li key={link.label}>
-                  <Link href={link.href} className="text-gray-500 hover:text-white text-sm transition-colors duration-200">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div>
-            <h4 className="text-white font-bold text-xs uppercase tracking-[0.15em] mb-3">
-              Services
-            </h4>
-            <ul className="space-y-2.5">
-              {['Renovations', 'Plumbing', 'Electrical', 'Welding', 'Building'].map((link) => (
-                <li key={link}>
-                  <Link href="/#services" className="text-gray-500 hover:text-white text-sm transition-colors duration-200">
-                    {link}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-bold text-xs uppercase tracking-[0.15em] mb-3">
-              Get in touch
-            </h4>
-            <ul className="space-y-2.5">
-              <li>
-                <a href="tel:0670318635" className="text-gray-500 hover:text-white text-sm transition-colors duration-200">
-                  067 031 8635
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://wa.me/27670318635"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-500 hover:text-white text-sm transition-colors duration-200"
-                >
-                  WhatsApp
-                </a>
-              </li>
-              <li>
-                <a href="mailto:projects@nowandalways.co.za" className="text-gray-500 hover:text-white text-sm transition-colors duration-200 break-all">
-                  projects@nowandalways.co.za
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-gray-600 text-xs">
-            &copy; {year ?? 2026} Now &amp; Always (PTY) LTD. All rights reserved.
-          </p>
-          <div className="flex items-center gap-3">
-            <a href="#" className="text-gray-600 hover:text-white transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center haptic-ripple rounded-lg" aria-label="Facebook">
-              <Facebook className="w-4 h-4" />
-            </a>
-            <a href="#" className="text-gray-600 hover:text-white transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center haptic-ripple rounded-lg" aria-label="Instagram">
-              <Instagram className="w-4 h-4" />
-            </a>
-            <a href="#" className="text-gray-600 hover:text-white transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center haptic-ripple rounded-lg" aria-label="LinkedIn">
-              <Linkedin className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </footer>
   )
 }
 
@@ -1084,7 +963,7 @@ export default function Home() {
         <TrustedBySection />
         <CredentialsSection />
         <TestimonialsSection />
-        <CTASection />
+        <ContactSection />
         <MapSection />
       </main>
       <Footer />

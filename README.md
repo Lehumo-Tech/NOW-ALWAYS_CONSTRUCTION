@@ -4,24 +4,31 @@ Professional construction company website built with Next.js, TypeScript, and Ta
 
 ## Overview
 
-A modern, responsive website for **Now & Always Construction** — a South African construction company showcasing their portfolio, services, and client testimonials.
+A modern, responsive website for **Now & Always Construction** — a South African construction company showcasing their portfolio, services, client testimonials, and credentials. Fully POPIA-compliant with deployment-agnostic architecture.
 
 ## Tech Stack
 
-- **Framework**: Next.js 16 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
+- **Framework**: Next.js 16 (App Router, standalone output)
+- **Language**: TypeScript (strict)
+- **Styling**: Tailwind CSS + glassmorphism effects
 - **UI Components**: shadcn/ui
 - **Icons**: Lucide React
-- **Deployment**: Docker + Kubernetes ready
+- **Form Validation**: react-hook-form + zod
+- **Deployment**: Docker + Kubernetes ready, Vercel/Netlify compatible
 
 ## Features
 
-- **Home Page** — Hero section, services overview, featured projects, trusted-by logos, client testimonials, CTA
+- **Home Page** — Hero, services, featured projects, credentials, client testimonials, POPIA-compliant quote form, map
 - **Gallery Page** — Filterable project gallery with masonry/grid/fullwidth layouts and lightbox
-- **Mobile Optimized** — Fully responsive across all device sizes
-- **SEO Ready** — Built-in sitemap.ts and robots.ts
-- **Kubernetes** — Production-ready K8s manifests (deployment, service, ingress, HPA, configmap)
+- **Privacy Policy** — POPIA-compliant privacy policy at `/privacy`
+- **POPIA Compliance** — Consent checkbox, privacy policy, consent timestamps
+- **Quote Form** — Client-side form with WhatsApp and email submission (no backend required)
+- **Mobile Optimized** — Fully responsive, WhatsApp-first communication
+- **Low-Bandwidth Friendly** — Click-to-load map, lazy-loaded images, minimal JS
+- **SEO Ready** — JSON-LD structured data, Open Graph, sitemap.xml, robots.txt
+- **Security Headers** — CSP, X-Frame-Options, XSS protection, referrer policy
+- **Credentials Section** — CIPC, CIDB, B-BBEE, CSD, trade-tested employees
+- **Kubernetes** — Production-ready K8s manifests
 - **Docker** — Multi-stage Dockerfile for containerized deployment
 
 ## Project Structure
@@ -30,17 +37,21 @@ A modern, responsive website for **Now & Always Construction** — a South Afric
 ├── src/
 │   ├── app/
 │   │   ├── page.tsx          # Home page
-│   │   ├── layout.tsx        # Root layout
-│   │   ├── globals.css       # Global styles
-│   │   ├── gallery/
-│   │   │   └── page.tsx      # Gallery page
-│   │   ├── api/
-│   │   │   └── route.ts      # API route
+│   │   ├── layout.tsx        # Root layout (SEO, JSON-LD, meta)
+│   │   ├── globals.css       # Global styles + animations
+│   │   ├── privacy/page.tsx  # POPIA Privacy Policy
+│   │   ├── gallery/page.tsx  # Portfolio gallery
 │   │   ├── robots.ts         # SEO robots.txt
-│   │   └── sitemap.ts        # SEO sitemap
-│   ├── components/ui/        # shadcn/ui components
-│   ├── hooks/                # Custom React hooks
-│   └── lib/                  # Utility functions
+│   │   └── sitemap.ts        # SEO sitemap.xml
+│   ├── components/
+│   │   ├── Header.tsx        # Shared navigation header
+│   │   ├── Footer.tsx        # Shared footer
+│   │   ├── QuoteForm.tsx     # POPIA-compliant contact form
+│   │   └── ui/               # shadcn/ui components
+│   ├── lib/
+│   │   ├── config.ts         # Site-wide constants (phone, email, etc.)
+│   │   └── utils.ts          # Utility functions
+│   └── hooks/                # Custom React hooks
 ├── public/
 │   ├── gallery/              # Portfolio images
 │   ├── logos/                # Client company logos
@@ -48,21 +59,19 @@ A modern, responsive website for **Now & Always Construction** — a South Afric
 │   └── logo.svg              # Company logo
 ├── k8s/                      # Kubernetes deployment configs
 ├── Dockerfile                # Docker build configuration
+├── .env.example              # Environment variable template
+├── DEPLOY.md                 # Comprehensive deployment guide
 └── package.json              # Dependencies & scripts
 ```
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- npm or bun
-
-### Installation
+## Quick Start
 
 ```bash
 # Install dependencies
 npm install
+
+# Copy environment config
+cp .env.example .env.local
 
 # Run development server
 npm run dev
@@ -74,50 +83,40 @@ npm run build
 npm start
 ```
 
-The app will be available at `http://localhost:3000`.
-
-### Docker
-
-```bash
-# Build image
-docker build -t now-always-construction .
-
-# Run container
-docker run -p 3000:3000 now-always-construction
-```
-
-### Kubernetes
-
-```bash
-# Apply all K8s resources
-kubectl apply -f k8s/
-
-# Check deployment status
-kubectl get pods -l app=now-always-construction
-```
-
 ## Environment Variables
 
-Create a `.env.local` file in the project root:
+See `.env.example` for the full list. Key variables:
 
-```env
-DATABASE_URL=file:./dev.db
-```
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_SITE_URL` | Your production domain (for SEO/sitemap) |
+| `NEXT_PUBLIC_SOCIAL_FACEBOOK` | Facebook page URL |
+| `NEXT_PUBLIC_SOCIAL_INSTAGRAM` | Instagram profile URL |
+| `NEXT_PUBLIC_SOCIAL_LINKEDIN` | LinkedIn page URL |
 
-## Client Testimonials
+## Deployment
 
-The website features testimonials from:
-- Mediclinic
-- Bosch Car Service
-- Discovery Insurance
-- Dr Els Dentistry
-- Hope High School
-- Majuba College
-- NL Cars
+See [DEPLOY.md](./DEPLOY.md) for comprehensive deployment instructions covering:
+- Vercel (recommended)
+- Netlify
+- Docker / VPS
+- Kubernetes
+- cPanel / Shared Hosting
+- SSL, DNS, and domain configuration
+
+## POPIA Compliance
+
+This site includes:
+- Required consent checkbox on the quote form
+- Privacy Policy page at `/privacy`
+- Consent timestamp recorded on every submission
+- Privacy Policy link in the footer
 
 ## Contact
 
 - **Phone**: 067 031 8635
+- **WhatsApp**: [Chat with us](https://wa.me/27670318635)
+- **Email**: projects@nowandalways.co.za
 - **Website**: [nowandalways.co.za](https://nowandalways.co.za)
 
 ## License

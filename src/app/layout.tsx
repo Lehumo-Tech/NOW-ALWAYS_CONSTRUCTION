@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-const SITE_URL = "https://nowandalways.co.za";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://nowandalways.co.za";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -122,11 +122,6 @@ const jsonLd = {
   priceRange: "$$",
   image: `${SITE_URL}/og-image.jpg`,
   sameAs: [],
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "4.8",
-    reviewCount: "7",
-  },
 };
 
 export default function RootLayout({
