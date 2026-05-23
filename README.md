@@ -21,8 +21,8 @@ A modern, responsive website for **Now & Always Construction** — a South Afric
 - **Home Page** — Hero, services, featured projects, credentials, client testimonials, POPIA-compliant quote form, map
 - **Gallery Page** — Filterable project gallery with masonry/grid/fullwidth layouts and lightbox
 - **Privacy Policy** — POPIA-compliant privacy policy at `/privacy`
-- **POPIA Compliance** — Consent checkbox, privacy policy, consent timestamps
-- **Quote Form** — Client-side form with WhatsApp and email submission (no backend required)
+- **POPIA Compliance** — Consent checkbox, privacy policy, consent timestamps, consent versioning, server-agnostic API template
+- **Quote Form** — Client-side form with WhatsApp and email submission (no backend required); API route template for server-side integration
 - **Mobile Optimized** — Fully responsive, WhatsApp-first communication
 - **Low-Bandwidth Friendly** — Click-to-load map, lazy-loaded images, minimal JS
 - **SEO Ready** — JSON-LD structured data, Open Graph, sitemap.xml, robots.txt
@@ -47,9 +47,12 @@ A modern, responsive website for **Now & Always Construction** — a South Afric
 │   │   ├── Header.tsx        # Shared navigation header
 │   │   ├── Footer.tsx        # Shared footer
 │   │   ├── QuoteForm.tsx     # POPIA-compliant contact form
+│   │   ├── QuoteForm/        # Form sub-components
+│   │   │   └── ConsentCheckbox.tsx  # Reusable POPIA consent component
 │   │   └── ui/               # shadcn/ui components
 │   ├── lib/
 │   │   ├── config.ts         # Site-wide constants (phone, email, etc.)
+│   │   ├── popia.ts          # POPIA compliance types, payloads, validation
 │   │   └── utils.ts          # Utility functions
 │   └── hooks/                # Custom React hooks
 ├── public/
@@ -61,6 +64,7 @@ A modern, responsive website for **Now & Always Construction** — a South Afric
 ├── Dockerfile                # Docker build configuration
 ├── .env.example              # Environment variable template
 ├── DEPLOY.md                 # Comprehensive deployment guide
+├── HANDOVER.md               # Code delivery handover document
 └── package.json              # Dependencies & scripts
 ```
 
@@ -107,10 +111,16 @@ See [DEPLOY.md](./DEPLOY.md) for comprehensive deployment instructions covering:
 ## POPIA Compliance
 
 This site includes:
-- Required consent checkbox on the quote form
+- Required consent checkbox on the quote form (reusable `ConsentCheckbox` component)
 - Privacy Policy page at `/privacy`
-- Consent timestamp recorded on every submission
-- Privacy Policy link in the footer
+- Consent timestamp recorded on every submission (ISO 8601)
+- Consent versioning — tracks which policy version the user agreed to
+- Privacy Policy link in the footer and consent label
+- Server-agnostic API route template at `/api/quote` with POPIA validation
+- Centralized POPIA module (`src/lib/popia.ts`) with types, payloads, and validation
+- IP address capture documented for server-side implementation
+
+See [HANDOVER.md](./HANDOVER.md) for the complete code delivery handover, including server-side integration guides.
 
 ## Contact
 

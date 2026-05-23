@@ -1,12 +1,37 @@
 'use client'
 
+/**
+ * QuoteForm — POPIA-Compliant Quote Request Form
+ *
+ * ────────────────────────────────────────────────────────────
+ * FOR THE HOSTING PROVIDER / CLIENT'S DEVELOPER:
+ *
+ * This form currently submits via two client-side channels:
+ * 1. WhatsApp (opens WhatsApp with pre-filled message)
+ * 2. Email (opens mailto: link with pre-filled body)
+ *
+ * Neither method stores data on a server. When you add a
+ * server-side form handler, update the `onSubmitAPI` function
+ * below to POST to `/api/quote` instead.
+ *
+ * The POPIA consent payload is generated at submission time
+ * using `generateConsentPayload()` from `@/lib/popia`.
+ * This ensures the timestamp reflects the actual consent moment.
+ *
+ * IP LOGGING: Client-side forms CANNOT capture IP addresses
+ * reliably. IP must be captured server-side. See the API route
+ * at `src/app/api/quote/route.ts` for implementation.
+ * ────────────────────────────────────────────────────────────
+ */
+
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { MessageCircle, Mail, CheckCircle, Loader2 } from 'lucide-react'
-import Link from 'next/link'
+import { MessageCircle, Mail, CheckCircle, Loader2, Send } from 'lucide-react'
 import { SITE } from '@/lib/config'
+import { generateConsentPayload } from '@/lib/popia'
+import ConsentCheckbox from '@/components/QuoteForm/ConsentCheckbox'
 
 /* ─────────── SCHEMA ─────────── */
 
@@ -35,7 +60,8 @@ const SERVICE_OPTIONS = [
 
 export default function QuoteForm() {
   const [submitted, setSubmitted] = useState(false)
-  const [submitMethod, setSubmitMethod] = useState<'whatsapp' | 'email' | null>(null)
+  const [submitMethod, setSubmitMethod] = useState<'whatsapp' | 'email' | 'api' | null>(null)
+  const [apiError, setApiError] = useState<string | null>(null)
 
   const {
     register,
@@ -55,8 +81,18 @@ export default function QuoteForm() {
     },
   })
 
+  /**
+   * Generate the POPIA consent payload at the moment of submission.
+   * This ensures the timestamp is accurate and tied to the user's
+   * explicit consent action.
+   */
+  const buildConsentPayload = () => generateConsentPayload(SITE.url)
+
+  /**
+   * Format form data + POPIA consent for WhatsApp message.
+   */
   const formatWhatsAppMessage = (data: QuoteFormData) => {
-    const consentTimestamp = new Date().toISOString()
+    const consent = buildConsentPayload()
     const lines = [
       `*New Quote Request — ${SITE.legalName}*`,
       '',
@@ -68,13 +104,17 @@ export default function QuoteForm() {
       `*Message:*`,
       data.message,
       '',
-      `*POPIA Consent:* Granted at ${consentTimestamp}`,
+      `*POPIA Consent:* Granted at ${consent.consent_timestamp}`,
+      `*Policy Version:* ${consent.consent_version}`,
     ]
     return encodeURIComponent(lines.join('\n'))
   }
 
+  /**
+   * Format form data + POPIA consent for email body.
+   */
   const formatEmailBody = (data: QuoteFormData) => {
-    const consentTimestamp = new Date().toISOString()
+    const consent = buildConsentPayload()
     const lines = [
       `New Quote Request — ${SITE.legalName}`,
       '',
@@ -86,19 +126,31 @@ export default function QuoteForm() {
       `Message:`,
       data.message,
       '',
-      `POPIA Consent: Granted at ${consentTimestamp}`,
+      `POPIA Consent: Granted at ${consent.consent_timestamp}`,
+      `Policy Version: ${consent.consent_version}`,
+      `Policy URL: ${consent.policy_url}`,
     ]
     return encodeURIComponent(lines.join('\n'))
   }
 
+  /**
+   * Submit via WhatsApp — opens WhatsApp with pre-filled message.
+   * No server required; data goes directly to the business phone.
+   */
   const onSubmitWhatsApp = (data: QuoteFormData) => {
+    setApiError(null)
     setSubmitMethod('whatsapp')
     const message = formatWhatsAppMessage(data)
     window.open(`${SITE.whatsapp}?text=${message}`, '_blank')
     setSubmitted(true)
   }
 
+  /**
+   * Submit via Email — opens default email client with pre-filled body.
+   * No server required; data goes directly to the business email.
+   */
   const onSubmitEmail = (data: QuoteFormData) => {
+    setApiError(null)
     setSubmitMethod('email')
     const subject = encodeURIComponent(`Quote Request: ${data.service} — ${data.fullName}`)
     const body = formatEmailBody(data)
@@ -108,6 +160,48 @@ export default function QuoteForm() {
     setSubmitted(true)
   }
 
+  /**
+   * Submit via API — POST to the server-side API route.
+   *
+   * HOSTING PROVIDER: This is the method to enable when you
+   * implement server-side storage. Uncomment the button below
+   * and update this function as needed.
+   */
+  const onSubmitAPI = async (data: QuoteFormData) => {
+    setApiError(null)
+    setSubmitMethod('api')
+    const consent = buildConsentPayload()
+
+    try {
+      const response = await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: data.fullName,
+          email: data.email,
+          phone: data.phone,
+          service: data.service,
+          message: data.message,
+          popia: consent,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        setApiError(result.error || 'Something went wrong. Please try again.')
+        setSubmitMethod(null)
+        return
+      }
+
+      setSubmitted(true)
+    } catch {
+      setApiError('Network error. Please check your connection and try again.')
+      setSubmitMethod(null)
+    }
+  }
+
+  /* ── Success state ────────────────────────────────────────── */
   if (submitted) {
     return (
       <div className="glass-strong rounded-lg p-5 sm:p-6 lg:p-8 text-center">
@@ -118,7 +212,9 @@ export default function QuoteForm() {
         <p className="text-gray-400 text-sm sm:text-base leading-[1.6] mb-4">
           {submitMethod === 'whatsapp'
             ? 'Your quote request has been opened in WhatsApp. Send the message and we\'ll get back to you shortly.'
-            : 'Your email client has been opened with the quote details. Send the email and we\'ll respond within 24 hours.'}
+            : submitMethod === 'email'
+              ? 'Your email client has been opened with the quote details. Send the email and we\'ll respond within 24 hours.'
+              : 'Your quote request has been received. We\'ll contact you within 24 hours.'}
         </p>
         <p className="text-gray-500 text-xs mb-5">
           POPIA consent recorded at {new Date().toISOString()}
@@ -127,6 +223,7 @@ export default function QuoteForm() {
           onClick={() => {
             setSubmitted(false)
             setSubmitMethod(null)
+            setApiError(null)
             reset()
           }}
           className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-5 py-2.5 rounded-md text-[13px] sm:text-sm min-h-[44px] haptic-glow"
@@ -137,6 +234,7 @@ export default function QuoteForm() {
     )
   }
 
+  /* ── Form ──────────────────────────────────────────────────── */
   const inputClasses = 'w-full bg-white/5 border border-white/10 rounded-md text-white placeholder:text-gray-600 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/25 focus:outline-none px-3 py-2.5 sm:py-3 text-[14px] sm:text-sm transition-colors duration-200'
   const labelClasses = 'text-gray-400 text-sm font-medium mb-1.5 block'
   const errorClasses = 'text-red-400 text-xs mt-1'
@@ -243,24 +341,17 @@ export default function QuoteForm() {
           )}
         </div>
 
-        {/* POPIA Consent */}
-        <div className="flex items-start gap-3 pt-1">
-          <input
-            id="quote-popia"
-            type="checkbox"
-            className="mt-1 w-4 h-4 shrink-0 rounded border-white/20 bg-white/5 text-blue-600 focus:ring-blue-500/25 focus:ring-offset-0 cursor-pointer accent-blue-600"
-            {...register('popia_consent')}
-          />
-          <label htmlFor="quote-popia" className="text-gray-500 text-[11px] sm:text-xs leading-[1.5] cursor-pointer">
-            I consent to {SITE.legalName} processing my personal information in accordance with their{' '}
-            <Link href="/privacy" className="text-blue-400 hover:text-blue-300 underline underline-offset-2 transition-colors duration-200">
-              Privacy Policy
-            </Link>{' '}
-            and the Protection of Personal Information Act (POPIA) of South Africa.
-          </label>
-        </div>
-        {errors.popia_consent && (
-          <p className={errorClasses}>{errors.popia_consent.message}</p>
+        {/* POPIA Consent — uses extracted reusable component */}
+        <ConsentCheckbox
+          error={errors.popia_consent?.message}
+          {...register('popia_consent')}
+        />
+
+        {/* API error display */}
+        {apiError && (
+          <div className="glass rounded-lg p-3 border border-red-500/20" role="alert">
+            <p className="text-red-400 text-xs sm:text-sm">{apiError}</p>
+          </div>
         )}
 
         {/* Submit buttons */}
@@ -292,6 +383,26 @@ export default function QuoteForm() {
             Submit via Email
           </button>
         </div>
+
+        {/*
+          HOSTING PROVIDER: Uncomment this button when you implement
+          the server-side API route at /api/quote. It provides
+          server-agnostic form submission with full POPIA compliance.
+
+        <button
+          type="button"
+          onClick={handleSubmit(onSubmitAPI)}
+          disabled={isSubmitting}
+          className="w-full inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-100 text-black font-semibold px-5 py-3 rounded-md text-[13px] sm:text-sm min-h-[44px] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 mt-2"
+        >
+          {isSubmitting ? (
+            <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+          ) : (
+            <Send className="w-4 h-4" aria-hidden="true" />
+          )}
+          Submit Online
+        </button>
+        */}
       </form>
     </div>
   )

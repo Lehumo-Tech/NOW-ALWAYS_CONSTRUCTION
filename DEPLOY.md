@@ -182,13 +182,40 @@ This site includes POPIA compliance features:
 - **Consent checkbox** on the quote form (required before submission)
 - **Privacy Policy page** at `/privacy`
 - **Consent timestamp** recorded on every form submission
-- **Privacy Policy link** in the footer
+- **Consent version** tracked (links to the specific policy version the user agreed to)
+- **Privacy Policy link** in the footer and consent label
+- **Server-agnostic API route** at `/api/quote` (template — implement storage)
+- **Centralized POPIA module** at `src/lib/popia.ts`
 
-**Important for the client:** If you later add server-side form processing (storing data in a database), you MUST:
-1. Log the consent timestamp server-side
-2. Store form submissions securely
-3. Provide a way for users to request data deletion
-4. Register as an Information Officer with the Information Regulator (if required)
+### POPIA Server-Side Implementation
+
+When you add server-side form processing, you MUST:
+
+1. **Implement the API route** at `src/app/api/quote/route.ts` — see HANDOVER.md for code examples
+2. **Log the consent timestamp** server-side (already captured by the API template)
+3. **Capture the submitter IP** from request headers (already implemented in the template)
+4. **Store form submissions securely** (encrypted at rest, access-controlled)
+5. **Provide a DSAR endpoint** — data subjects must be able to request access to their data
+6. **Provide a data deletion endpoint** — data subjects must be able to request deletion
+7. **Register as an Information Officer** with the Information Regulator (if required by POPIA)
+
+### IP Address Capture
+
+The client-side form does NOT capture IP addresses. This is intentional:
+- Client-side IP detection is unreliable (VPNs, proxies, browser restrictions)
+- POPIA audit trails require accurate IP logging
+- The API route template captures IP from server headers:
+  - `X-Forwarded-For` (Vercel, Nginx, most cloud providers)
+  - `X-Real-IP` (Nginx with `real_ip` module)
+  - `CF-Connecting-IP` (Cloudflare)
+
+### When the Privacy Policy Changes
+
+1. Update the content in `src/app/privacy/page.tsx`
+2. Increment `POPIA_POLICY_VERSION` in `src/lib/popia.ts` (e.g., `2026-03` → `2026-06`)
+3. Update `POPIA_POLICY_DATE` in `src/lib/popia.ts`
+4. Update the "Last updated" date in the privacy page banner
+5. Existing consent records retain their original version — this is correct and expected
 
 ---
 
