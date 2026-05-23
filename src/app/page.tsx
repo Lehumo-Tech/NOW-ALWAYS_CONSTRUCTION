@@ -31,6 +31,10 @@ import {
   ExternalLink,
   Navigation,
   Mail,
+  Award,
+  CheckCircle,
+  Users,
+  BadgeCheck,
 } from 'lucide-react'
 
 /* ─────────── SCROLL REVEAL HOOK ─────────── */
@@ -250,9 +254,44 @@ const GALLERY_IMAGES = [
 const FEATURED_IMAGES = GALLERY_IMAGES.slice(0, 6)
 
 const TRUST_MARKS = [
-  { icon: Shield, label: 'Registered company', value: '2021/438875/07' },
+  { icon: Shield, label: 'CIPC Registered', value: '2021/438875/07' },
+  { icon: Award, label: 'CIDB Registered', value: 'Graded Contractor' },
+  { icon: CheckCircle, label: 'B-BBEE Compliant', value: 'Verified' },
   { icon: Clock, label: 'In business since', value: '2021' },
   { icon: MapPin, label: 'Based in', value: 'Newcastle, KZN' },
+]
+
+const CREDENTIALS = [
+  {
+    icon: Shield,
+    title: 'CIPC Registered',
+    description: 'Registered with the Companies and Intellectual Property Commission as Now and Always (Pty) Ltd, registration number 2021/438875/07. A fully compliant, legally operating South African company.',
+    badge: 'Reg: 2021/438875/07',
+  },
+  {
+    icon: Award,
+    title: 'CIDB Registered',
+    description: 'Registered with the Construction Industry Development Board, the statutory body that regulates and promotes growth in the South African construction sector. Our CIDB grading qualifies us for public and private sector contracts.',
+    badge: 'Graded Contractor',
+  },
+  {
+    icon: CheckCircle,
+    title: 'B-BBEE Registered',
+    description: 'Verified B-BBEE contributor, demonstrating our commitment to economic transformation and empowerment in South Africa. Our B-BBEE status supports clients procurement requirements and preferential procurement scoring.',
+    badge: 'B-BBEE Verified',
+  },
+  {
+    icon: BadgeCheck,
+    title: 'CSD Nationwide',
+    description: 'Registered on the Central Supplier Database (CSD) for all organs of state. This means government departments, municipalities, and SOEs can procure our services directly through the national supplier database without additional administrative overhead.',
+    badge: 'National Supplier',
+  },
+  {
+    icon: Users,
+    title: 'Trade-Tested Employees',
+    description: 'Every tradesperson on our team holds valid, recognised trade qualifications. Our plumbers, electricians, and builders are qualified and trade-tested, ensuring all work meets SABS standards and is signed off by competent professionals.',
+    badge: 'Qualified Team',
+  },
 ]
 
 /* ─────────── COMPONENTS ─────────── */
@@ -576,6 +615,54 @@ function TrustedBySection() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function CredentialsSection() {
+  const sectionRef = useScrollReveal()
+
+  return (
+    <section ref={sectionRef} className="bg-[#0a0a0b] py-14 sm:py-20 lg:py-28 border-t border-white/5" aria-label="Credentials and registrations">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-10 sm:mb-14 scroll-reveal">
+          <p className="text-blue-400 text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase mb-2">
+            Fully registered &amp; compliant
+          </p>
+          <h2 className="text-[1.75rem] sm:text-4xl lg:text-[2.75rem] font-extrabold text-white uppercase leading-[1.1] tracking-tight">
+            Our credentials
+          </h2>
+          <p className="mt-3 text-gray-400 text-[14px] sm:text-base max-w-2xl mx-auto leading-[1.6]">
+            We operate above board in every respect. Our registrations and compliance give clients confidence that their project is in qualified, legally compliant hands.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+          {CREDENTIALS.map((cred, i) => (
+            <div
+              key={cred.title}
+              className={`scroll-scale stagger-${i + 1} group glass hover:border-blue-500/20 rounded-lg p-5 sm:p-6 flex flex-col haptic-lift ${i === CREDENTIALS.length - 1 ? 'sm:col-span-2 lg:col-span-1' : ''}`}
+            >
+              <div className="flex items-start gap-3 sm:gap-4 mb-3">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 glass-blue rounded-lg flex items-center justify-center shrink-0 transition-colors duration-200">
+                  <cred.icon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" aria-hidden="true" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-white font-bold text-[15px] sm:text-base uppercase tracking-wide">
+                    {cred.title}
+                  </h3>
+                  <span className="inline-block mt-1 text-blue-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider bg-blue-500/10 px-2 py-0.5 rounded">
+                    {cred.badge}
+                  </span>
+                </div>
+              </div>
+              <p className="text-gray-400 text-[13px] sm:text-sm leading-[1.6] flex-1">
+                {cred.description}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -995,6 +1082,7 @@ export default function Home() {
         <ServicesSection />
         <FeaturedProjectsSection />
         <TrustedBySection />
+        <CredentialsSection />
         <TestimonialsSection />
         <CTASection />
         <MapSection />
